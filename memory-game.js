@@ -1,4 +1,42 @@
 // an id, a name and a picture url
+const imagesWeather = [
+  {
+    name: "sunny",
+    url: "./assets/sunny.png",
+    "back-cover": "./assets/back.jpg",
+    id: 0,
+    isFlipped: false,
+    isMatched: false,
+    value: "sol",
+  },
+  {
+    name: "cloudy",
+    url: "./assets/cloudy.png",
+    "back-cover": "./assets/back.jpg",
+    id: 1,
+    isFlipped: false,
+    isMatched: false,
+    value: "overskyet",
+  },
+  {
+    name: "rainy",
+    url: "./assets/rainy.png",
+    "back-cover": "./assets/back.jpg",
+    id: 2,
+    isFlipped: false,
+    isMatched: false,
+    value: "regn",
+  },
+  {
+    name: "snowy",
+    url: "./assets/snowy.png",
+    "back-cover": "./assets/back.jpg",
+    id: 3,
+    isFlipped: false,
+    isMatched: false,
+    value: "sne",
+  },
+];
 const images = [
   {
     name: "fox",
@@ -66,18 +104,25 @@ const images = [
   },
 ];
 const animals = ["ræv", "hund", "kat", "hest", "bjørn", "ørn", "giraf"];
+const weather = ["sol", "overskyet", "regn", "sne"];
 //get the grid container
 //create a card with a front and back image
 //add the card to the grid container
 
 document.addEventListener("DOMContentLoaded", function () {
   const grid = document.getElementById("grid-container");
+
+  function shuffle(array) {
+    array.sort(() => Math.random() - 0.5);
+    return array;
+  }
   function createCard(type, data, imgBackSrc) {
     const cardContainer = document.createElement("div");
     cardContainer.classList.add("card-container");
 
     const card = document.createElement("div");
     card.classList.add("card");
+
     let frontContent;
     if (type === "image") {
       const imgFront = document.createElement("img");
@@ -86,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
       frontContent = imgFront;
     } else if (type === "word") {
       const wordFront = document.createElement("div");
-      wordFront.classList.add("front");
+      wordFront.classList.add("front", "word");
       wordFront.textContent = data;
       frontContent = wordFront;
     }
@@ -104,15 +149,39 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     return cardContainer;
   }
-  //populate the grid with cards
 
-  images.forEach((image) => {
-    const card = createCard("image", image.url, image["back-cover"]);
+  function populateGrid(category) {
+    grid.innerHTML = "";
+    let combinedArray = [];
+    if (category === "animals") {
+      combinedArray = images.concat(
+        animals.map((animal) => ({ type: "word", data: animal }))
+      );
+    } else if (category === "weather") {
+      combinedArray = imagesWeather.concat(
+        weather.map((weather) => ({
+          type: "word",
+          data: weather,
+        }))
+      );
+    }
+    shuffle(combinedArray);
+    combinedArray.forEach((item) => {
+      if (item.url) {
+        const card = createCard("image", item.url, item["back-cover"]);
+        grid.appendChild(card);
+      } else if (item.data) {
+        const card = createCard("word", item.data, "./assets/back.jpg");
+        grid.appendChild(card);
+      }
+    });
+  }
 
-    grid.appendChild(card);
+  document.getElementById("animals-btn").addEventListener("click", () => {
+    populateGrid("animals");
   });
-  animals.forEach((animal) => {
-    const card = createCard("word", animal, "./assets/back.jpg");
-    grid.appendChild(card);
+  document.getElementById("weather-btn").addEventListener("click", () => {
+    populateGrid("weather");
   });
+  populateGrid("animals");
 });
