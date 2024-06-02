@@ -111,77 +111,77 @@ const weather = ["sol", "overskyet", "regn", "sne"];
 
 document.addEventListener("DOMContentLoaded", function () {
   const grid = document.getElementById("grid-container");
-
-  function shuffle(array) {
-    array.sort(() => Math.random() - 0.5);
-    return array;
-  }
-  function createCard(type, data, imgBackSrc) {
-    const cardContainer = document.createElement("div");
-    cardContainer.classList.add("card-container");
-
-    const card = document.createElement("div");
-    card.classList.add("card");
-
-    let frontContent;
-    if (type === "image") {
-      const imgFront = document.createElement("img");
-      imgFront.src = data;
-      imgFront.classList.add("front");
-      frontContent = imgFront;
-    } else if (type === "word") {
-      const wordFront = document.createElement("div");
-      wordFront.classList.add("front", "word");
-      wordFront.textContent = data;
-      frontContent = wordFront;
-    }
-
-    const imgBack = document.createElement("img");
-    imgBack.src = imgBackSrc;
-    imgBack.classList.add("back");
-
-    card.appendChild(frontContent);
-    card.appendChild(imgBack);
-    cardContainer.appendChild(card);
-
-    card.addEventListener("click", function () {
-      card.classList.toggle("isFlipped");
-    });
-    return cardContainer;
-  }
-
-  function populateGrid(category) {
-    grid.innerHTML = "";
-    let combinedArray = [];
-    if (category === "animals") {
-      combinedArray = images.concat(
-        animals.map((animal) => ({ type: "word", data: animal }))
-      );
-    } else if (category === "weather") {
-      combinedArray = imagesWeather.concat(
-        weather.map((weather) => ({
-          type: "word",
-          data: weather,
-        }))
-      );
-    }
-    shuffle(combinedArray);
-    combinedArray.forEach((item) => {
-      if (item.url) {
-        const card = createCard("image", item.url, item["back-cover"]);
-        grid.appendChild(card);
-      } else if (item.data) {
-        const card = createCard("word", item.data, "./assets/back.jpg");
-        grid.appendChild(card);
-      }
-    });
-  }
-
   document.getElementById("animals-btn").addEventListener("click", () => {
-    populateGrid("animals");
+    populateGrid("animals", grid);
   });
   document.getElementById("weather-btn").addEventListener("click", () => {
-    populateGrid("weather");
+    populateGrid("weather", grid);
   });
-  populateGrid("animals");
+  populateGrid("animals", grid);
 });
+
+function shuffle(array) {
+  array.sort(() => Math.random() - 0.5);
+  return array;
+}
+
+function createCard(type, data, imgBackSrc) {
+  const cardContainer = document.createElement("div");
+  cardContainer.classList.add("card-container");
+
+  const card = document.createElement("div");
+  card.classList.add("card");
+
+  let frontContent;
+  if (type === "image") {
+    const imgFront = document.createElement("img");
+    imgFront.src = data;
+    imgFront.classList.add("front");
+    frontContent = imgFront;
+  } else if (type === "word") {
+    const wordFront = document.createElement("div");
+    wordFront.classList.add("front", "word");
+    wordFront.textContent = data;
+    frontContent = wordFront;
+  }
+
+  const imgBack = document.createElement("img");
+  imgBack.src = imgBackSrc;
+  imgBack.classList.add("back");
+
+  card.appendChild(frontContent);
+  card.appendChild(imgBack);
+  cardContainer.appendChild(card);
+
+  card.addEventListener("click", function () {
+    card.classList.toggle("isFlipped");
+  });
+  return cardContainer;
+}
+
+function populateGrid(category, grid) {
+  grid.innerHTML = "";
+  let combinedArray = [];
+  if (category === "animals") {
+    combinedArray = images.concat(
+      animals.map((animal) => ({ type: "word", data: animal }))
+    );
+  } else if (category === "weather") {
+    combinedArray = imagesWeather.concat(
+      weather.map((weather) => ({
+        type: "word",
+        data: weather,
+      }))
+    );
+  }
+  shuffle(combinedArray);
+  combinedArray.forEach((item) => {
+    if (item.url) {
+      const card = createCard("image", item.url, item["back-cover"]);
+      grid.appendChild(card);
+    } else if (item.data) {
+      const card = createCard("word", item.data, "./assets/back.jpg");
+      grid.appendChild(card);
+    }
+  });
+}
