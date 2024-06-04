@@ -149,14 +149,43 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("category").addEventListener("change", (e) => {
     const selectedCategory = e.target.value;
     console.log(selectedCategory);
+    resetTimer();
     if (selectedCategory === "animals") {
       populateGrid("animals", grid);
     } else if (selectedCategory === "weather") {
       populateGrid("weather", grid);
     }
   });
+  populateGrid("animals", grid);
 });
 
+//count down timer
+const timer = document.getElementById("timer");
+let timerID;
+let seconds = 60;
+let timerStarted = false;
+
+function startTimer() {
+  if (!timerStarted) {
+    timerID = setInterval(countDown, 1000);
+    timerStarted = true;
+  }
+}
+function countDown() {
+  seconds--;
+  timer.innerHTML = seconds;
+  if (seconds === 0) {
+    clearInterval(timerID);
+    alert("Time is up!");
+  }
+}
+function resetTimer() {
+  clearInterval(timerID);
+  seconds = 60;
+  timer.innerHTML = seconds;
+  timerStarted = false;
+}
+//shuffle array of cards
 function shuffle(array) {
   array.sort(() => Math.random() - 0.5);
   return array;
@@ -220,5 +249,11 @@ function populateGrid(category, grid) {
       const card = createCard("word", item.data, "./assets/back.jpg");
       grid.appendChild(card);
     }
+  });
+  const cards = document.querySelectorAll(".card");
+  cards.forEach((card) => {
+    card.addEventListener("click", () => {
+      startTimer();
+    });
   });
 }
