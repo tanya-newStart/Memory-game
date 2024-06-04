@@ -15,21 +15,6 @@ header {
   margin-bottom: 50px;
   display: flex;
 }
-#animals-btn,
-#weather-btn {
-  border-radius: 15px;
-  width: 45%;
-  padding: 10px;
-  margin: 5px auto;
-  background: #88bae9;
-  cursor: pointer;
-  border: none;
-  text-align: center;
-  color: white;
-  font-size: 0.8rem;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0.1);
-}
 #grid-container {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -40,7 +25,7 @@ header {
   perspective: 1000px;
 }
 .card {
-  width: 150px;
+  width: 175px;
   height: 200px;
   position: relative;
   transition: transform 0.5s ease, box-shadow 0.3s ease, border 0.3s ease;
