@@ -36,6 +36,33 @@ const imagesWeather = [
     isMatched: false,
     value: "sne",
   },
+  {
+    name: "foggy",
+    url: "./assets/foggy.png",
+    "back-cover": "./assets/back.jpg",
+    id: 4,
+    isFlipped: false,
+    isMatched: false,
+    value: "tåge",
+  },
+  {
+    name: "windy",
+    url: "./assets/windy.png",
+    "back-cover": "./assets/back.jpg",
+    id: 5,
+    isFlipped: false,
+    isMatched: false,
+    value: "vind",
+  },
+  {
+    name: "stormy",
+    url: "./assets/stormy.png",
+    "back-cover": "./assets/back.jpg",
+    id: 6,
+    isFlipped: false,
+    isMatched: false,
+    value: "storm",
+  },
 ];
 const images = [
   {
@@ -104,20 +131,30 @@ const images = [
   },
 ];
 const animals = ["ræv", "hund", "kat", "hest", "bjørn", "ørn", "giraf"];
-const weather = ["sol", "overskyet", "regn", "sne"];
+const weather = [
+  "sol",
+  "overskyet",
+  "regn",
+  "sne",
+  "tåge",
+  "tordenvejr",
+  "vind",
+];
 //get the grid container
 //create a card with a front and back image
 //add the card to the grid container
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
   const grid = document.getElementById("grid-container");
-  document.getElementById("animals-btn").addEventListener("click", () => {
-    populateGrid("animals", grid);
+  document.getElementById("category").addEventListener("change", (e) => {
+    const selectedCategory = e.target.value;
+    console.log(selectedCategory);
+    if (selectedCategory === "animals") {
+      populateGrid("animals", grid);
+    } else if (selectedCategory === "weather") {
+      populateGrid("weather", grid);
+    }
   });
-  document.getElementById("weather-btn").addEventListener("click", () => {
-    populateGrid("weather", grid);
-  });
-  populateGrid("animals", grid);
 });
 
 function shuffle(array) {
