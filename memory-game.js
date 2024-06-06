@@ -115,6 +115,7 @@ function combineData(images, words) {
 }
 let activeCards = [];
 let matchedCards = [];
+let numberOfMoves = 0;
 function populateGrid(category, grid) {
   grid.innerHTML = "";
   let combinedArray =
@@ -163,6 +164,8 @@ function createCard(type, data, id, imgBackSrc) {
       return;
     }
     card.classList.toggle("isFlipped");
+    document.getElementById("counter").innerHTML = ++numberOfMoves;
+    console.log(numberOfMoves);
     activeCards.push(card);
 
     if (activeCards.length === 1 && !timerStarted) {
