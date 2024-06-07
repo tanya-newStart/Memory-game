@@ -188,17 +188,34 @@ document.addEventListener("DOMContentLoaded", () => {
   overlay.classList.add("visible");
 
   const grid = document.getElementById("grid-container");
+  grid.classList.add("disabled");
   const startGameBtn = document.getElementById("start-game");
+  const restartGameBtn = document.getElementById("restart-game");
 
   startGameBtn.addEventListener("click", () => {
     overlay.classList.remove("visible");
+    grid.classList.remove("disabled");
+  });
+  restartGameBtn.addEventListener("click", (e) => {
+    const overlays = document.querySelectorAll(".overlay-text");
+    overlays.forEach((item) => item.classList.remove("visible"));
+    grid.classList.add("disabled");
+    resetTimer();
+    resetMoves();
+    populateGrid(document.getElementById("category").value, grid);
+
+    grid.classList.remove("disabled");
   });
 
   document.getElementById("category").addEventListener("change", (e) => {
     const selectedCategory = e.target.value;
     console.log(selectedCategory);
+    grid.classList.add("disabled");
     resetTimer();
+    resetMoves();
     populateGrid(selectedCategory, grid);
+
+    grid.classList.remove("disabled");
   });
   populateGrid("animals", grid);
 });
@@ -206,7 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
 //timer
 const timer = document.getElementById("timer");
 let timerID;
-let seconds = 100;
+let seconds = 15;
 let timerStarted = false;
 
 function startTimer() {
@@ -226,9 +243,14 @@ function countDown() {
 }
 function resetTimer() {
   clearInterval(timerID);
-  seconds = 100;
+  seconds = 15;
   timer.innerHTML = seconds;
   timerStarted = false;
+}
+
+function resetMoves() {
+  numberOfMoves = 0;
+  document.getElementById("counter").innerHTML = numberOfMoves;
 }
 //shuffle array of cards
 function shuffle(array) {

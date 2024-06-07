@@ -24,7 +24,8 @@ header {
 
 .overlay-text {
   display: none;
-  width: 80vh;
+  width: 90%;
+  max-width: 600px;
   height: 60vh;
   position: fixed;
   top: 50%;
@@ -33,9 +34,7 @@ header {
   flex-direction: column;
   justify-items: center;
   align-items: center;
-
   z-index: 100;
-  /* background-color: rgba(0, 0, 0, 0.4); */
   padding: 30px;
   border-radius: 10px;
   color: white;
@@ -46,10 +45,20 @@ header {
   display: flex;
   animation: overlay-grow 500ms forwards;
 }
-#start-game {
+#start-game,
+#restart-game {
   margin-top: 20px;
-  padding: 5px;
+  padding: 10px 20px;
   font-size: 1.1rem;
+  color: white;
+  background-color: #ff69b4;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#start-game:hover,
+#restart-game:hover {
+  background-color: #ff1493;
 }
 #category {
   padding: 5px;
@@ -69,10 +78,14 @@ header {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  gap: 50px;
+  gap: 20px;
 }
 .card-container {
   perspective: 1000px;
+}
+#grid-container.disabled {
+  pointer-events: none;
+  opacity: 0.5;
 }
 .card {
   width: 150px;
@@ -124,6 +137,18 @@ header {
   height: 100%;
 }
 @media (max-width: 600px) {
+  header {
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+  }
+  .overlay-text {
+    width: 90%;
+    max-width: 90%;
+    height: auto;
+    padding: 20px;
+    font-size: 0.9rem;
+  }
   body {
     background-color: #d3d3d3;
     height: auto;
@@ -135,8 +160,8 @@ header {
     padding: 10px;
   }
   .card {
-    width: 100px;
-    height: 130px;
+    width: 120px;
+    height: 150px;
     font-size: 0.8rem;
   }
   .card img,
