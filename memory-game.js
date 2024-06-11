@@ -1,102 +1,19 @@
-// an id, a name and a picture url
-const imagesWeather = [
-  {
-    name: "sunny",
-    url: "./assets/sunny.png",
-    "back-cover": "./assets/back.jpg",
-    id: 0,
-  },
-  {
-    name: "cloudy",
-    url: "./assets/cloudy.png",
-    "back-cover": "./assets/back.jpg",
-    id: 1,
-  },
-  {
-    name: "rainy",
-    url: "./assets/rainy.png",
-    "back-cover": "./assets/back.jpg",
-    id: 2,
-  },
-  {
-    name: "snowy",
-    url: "./assets/snowy.png",
-    "back-cover": "./assets/back.jpg",
-    id: 3,
-  },
-  {
-    name: "foggy",
-    url: "./assets/foggy.png",
-    "back-cover": "./assets/back.jpg",
-    id: 4,
-  },
+const baseURL =
+  "https://raw.githubusercontent.com/tanya-newStart/tanya-newStart.github.io/main";
+let data = {};
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOMContentLoaded");
+  fetch(
+    "https://raw.githubusercontent.com/tanya-newStart/tanya-newStart.github.io/main/data.json"
+  )
+    .then((response) => response.json())
+    .then((rawData) => {
+      data = rawData;
+      initializeGame();
+    })
+    .catch((error) => console.error(error));
+});
 
-  {
-    name: "stormy",
-    url: "./assets/stormy.png",
-    "back-cover": "./assets/back.jpg",
-    id: 6,
-  },
-];
-const images = [
-  {
-    name: "fox",
-    url: "./assets/fox.jpg",
-    "back-cover": "./assets/back.jpg",
-    id: 0,
-  },
-
-  {
-    name: "dog",
-    url: "./assets/dog.jpg",
-    "back-cover": "./assets/back.jpg",
-    id: 2,
-  },
-  {
-    name: "cat",
-    url: "./assets/cat.jpg",
-    "back-cover": "./assets/back.jpg",
-    id: 3,
-  },
-  {
-    name: "horse",
-    url: "./assets/horse.jpg",
-    "back-cover": "./assets/back.jpg",
-    id: 4,
-  },
-  {
-    name: "bear",
-    url: "./assets/bear.jpg",
-    "back-cover": "./assets/back.jpg",
-    id: 5,
-  },
-  {
-    name: "eagle",
-    url: "./assets/eagle.jpg",
-    "back-cover": "./assets/back.jpg",
-    id: 6,
-  },
-];
-const animals = [
-  { word: "ræv", id: 0 },
-  { word: "hund", id: 2 },
-  { word: "kat", id: 3 },
-  { word: "heste", id: 4 },
-  { word: "bjørn", id: 5 },
-  { word: "ørn", id: 6 },
-];
-
-const weather = [
-  { word: "sol", id: 0 },
-  { word: "overskyet", id: 1 },
-  { word: "regn", id: 2 },
-  { word: "sne", id: 3 },
-  { word: "tåge", id: 4 },
-  { word: "storm", id: 6 },
-];
-//get the grid container
-//create a card with a front and back image
-//add the card to the grid container
 function combineData(images, words) {
   return [
     ...images.map((image) => ({
@@ -109,19 +26,22 @@ function combineData(images, words) {
       ...word,
       type: "word",
       data: word.word,
-      imgBackSrc: "./assets/back.jpg",
+      imgBackSrc: `${baseURL}/assets/back.jpg`,
     })),
   ];
 }
 let activeCards = [];
 let matchedCards = [];
 let numberOfMoves = 0;
-function populateGrid(category, grid) {
+
+function populateGrid(category, grid, data) {
+  console.log("Populating grid with category:", category);
+  console.log("Data length:", data.length);
   grid.innerHTML = "";
   let combinedArray =
     category === "animals"
-      ? combineData(images, animals)
-      : combineData(imagesWeather, weather);
+      ? combineData(data.images, data.animals)
+      : combineData(data.imagesWeather, data.weather);
 
   shuffle(combinedArray);
 
@@ -132,6 +52,9 @@ function populateGrid(category, grid) {
 }
 
 function createCard(type, data, id, imgBackSrc) {
+  console.log(
+    `Creating card of type ${type}, id: ${id}, data: ${data}, imgBackSrc: ${imgBackSrc}`
+  );
   const cardContainer = document.createElement("div");
   cardContainer.classList.add("card-container");
 
@@ -182,7 +105,9 @@ function createCard(type, data, id, imgBackSrc) {
   return cardContainer;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function initializeGame() {
+  console.log("initializeGame");
+
   const overlay = document.querySelector(".overlay-text");
   overlay.classList.add("visible");
 
@@ -195,13 +120,13 @@ document.addEventListener("DOMContentLoaded", () => {
     overlay.classList.remove("visible");
     grid.classList.remove("disabled");
   });
-  restartGameBtn.addEventListener("click", (e) => {
+  restartGameBtn.addEventListener("click", () => {
     const overlays = document.querySelectorAll(".overlay-text");
     overlays.forEach((item) => item.classList.remove("visible"));
     grid.classList.add("disabled");
     resetTimer();
     resetMoves();
-    populateGrid(document.getElementById("category").value, grid);
+    populateGrid(document.getElementById("category").value, grid, data);
 
     grid.classList.remove("disabled");
   });
@@ -211,13 +136,12 @@ document.addEventListener("DOMContentLoaded", () => {
     grid.classList.add("disabled");
     resetTimer();
     resetMoves();
-    populateGrid(selectedCategory, grid);
+    populateGrid(selectedCategory, grid, data);
 
     grid.classList.remove("disabled");
   });
-  populateGrid("animals", grid);
-});
-
+  populateGrid("animals", grid, data);
+}
 //timer
 const timer = document.getElementById("timer");
 let timerID;
