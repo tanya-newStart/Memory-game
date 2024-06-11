@@ -165,7 +165,6 @@ function createCard(type, data, id, imgBackSrc) {
     }
     card.classList.toggle("isFlipped");
     document.getElementById("counter").innerHTML = ++numberOfMoves;
-    console.log(numberOfMoves);
     activeCards.push(card);
 
     if (activeCards.length === 1 && !timerStarted) {
@@ -209,7 +208,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("category").addEventListener("change", (e) => {
     const selectedCategory = e.target.value;
-    console.log(selectedCategory);
     grid.classList.add("disabled");
     resetTimer();
     resetMoves();
