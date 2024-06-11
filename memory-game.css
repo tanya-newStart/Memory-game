@@ -3,45 +3,93 @@
   padding: 0;
   box-sizing: border-box;
 }
+html {
+  min-height: 100vh;
+}
 body {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   padding: 25px;
 }
 header {
-  margin-bottom: 50px;
+  width: 100vh;
+  margin-bottom: 20px;
   display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
-#animals-btn,
-#weather-btn {
-  border-radius: 15px;
-  width: 45%;
-  padding: 10px;
-  margin: 5px auto;
-  background: #88bae9;
-  cursor: pointer;
-  border: none;
-  text-align: center;
+
+.overlay-text {
+  display: none;
+  width: 90%;
+  max-width: 600px;
+  height: 60vh;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+  z-index: 100;
+  padding: 30px;
+  border-radius: 10px;
   color: white;
-  font-size: 0.8rem;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0.1);
+  font-size: 1.5em;
+  text-align: center;
+}
+.overlay-text.visible {
+  display: flex;
+  animation: overlay-grow 500ms forwards;
+}
+#start-game,
+#restart-game {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  color: white;
+  background-color: #ff69b4;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#start-game:hover,
+#restart-game:hover {
+  background-color: #ff1493;
+}
+#category {
+  padding: 5px;
+  font-size: 1.1rem;
+}
+@keyframes overlay-grow {
+  from {
+    background-color: rgba(0, 0, 0, 0);
+    font-size: 0;
+  }
+  to {
+    background-color: rgba(240, 166, 223, 0.8);
+    font-size: 2rem;
+  }
 }
 #grid-container {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 50px;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 20px;
 }
 .card-container {
   perspective: 1000px;
 }
+#grid-container.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
 .card {
   width: 150px;
-  height: 200px;
+  height: 175px;
   position: relative;
   transition: transform 0.5s ease, box-shadow 0.3s ease, border 0.3s ease;
   transform-style: preserve-3d;
@@ -89,6 +137,18 @@ header {
   height: 100%;
 }
 @media (max-width: 600px) {
+  header {
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+  }
+  .overlay-text {
+    width: 90%;
+    max-width: 90%;
+    height: auto;
+    padding: 20px;
+    font-size: 0.9rem;
+  }
   body {
     background-color: #d3d3d3;
     height: auto;
@@ -100,8 +160,8 @@ header {
     padding: 10px;
   }
   .card {
-    width: 100px;
-    height: 130px;
+    width: 120px;
+    height: 150px;
     font-size: 0.8rem;
   }
   .card img,

@@ -8,9 +8,28 @@
   </head>
   <body>
     <header>
-      <button id="animals-btn">Animals</button>
-      <button id="weather-btn">Weather</button>
+      <p>Count Down: <span id="timer">15</span>s</p>
+      <p>Number of moves: <span id="counter">0</span></p>
     </header>
+    <div class="overlay-text visible">
+      <h5 class="title">Memory Game</h5>
+      <label for="category"
+        >Choose a category
+        <select id="category" name="category-list">
+          <option value="animals">Animals</option>
+          <option value="weather">Weather</option>
+        </select>
+      </label>
+      <button id="start-game" class="play">Start the Game</button>
+    </div>
+    <div id="game-over" class="overlay-text">
+      Game over!
+      <button id="restart-game">Restart</button>
+    </div>
+    <div id="success" class="overlay-text">
+      Woo-hoo! All cards are matched!
+      <span>Play again</span>
+    </div>
     <div id="grid-container"></div>
 
     <script src="memory-game.js"></script>
