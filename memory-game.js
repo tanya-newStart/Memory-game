@@ -38,10 +38,19 @@ function combineData(images, words) {
 
 function populateGrid(category, grid, data) {
   grid.innerHTML = "";
-  let combinedArray =
-    category === "animals"
-      ? combineData(data.images, data.animals)
-      : combineData(data.imagesWeather, data.weather);
+
+  const categoryData = {
+    animals: { images: data.images, words: data.animals },
+    weather: { images: data.imagesWeather, words: data.weather },
+    clothes: { images: data.imagesClothes, words: data.clothes },
+  };
+
+  const selectedCategory = categoryData[category];
+
+  const combinedArray = combineData(
+    selectedCategory.images,
+    selectedCategory.words
+  );
 
   shuffle(combinedArray);
 
