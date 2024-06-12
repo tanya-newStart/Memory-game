@@ -1,6 +1,11 @@
 const baseURL =
   "https://raw.githubusercontent.com/tanya-newStart/tanya-newStart.github.io/main";
 let data = {};
+let activeCards = [];
+let matchedCards = [];
+let numberOfMoves = 0;
+let timerStarted = false;
+
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOMContentLoaded");
   fetch(
@@ -19,8 +24,8 @@ function combineData(images, words) {
     ...images.map((image) => ({
       ...image,
       type: "image",
-      data: image.url,
-      imgBackSrc: image["back-cover"],
+      data: `${baseURL}/${image.url}`,
+      imgBackSrc: `${baseURL}/assets/back.jpg`,
     })),
     ...words.map((word) => ({
       ...word,
@@ -30,13 +35,8 @@ function combineData(images, words) {
     })),
   ];
 }
-let activeCards = [];
-let matchedCards = [];
-let numberOfMoves = 0;
 
 function populateGrid(category, grid, data) {
-  console.log("Populating grid with category:", category);
-  console.log("Data length:", data.length);
   grid.innerHTML = "";
   let combinedArray =
     category === "animals"
@@ -52,9 +52,6 @@ function populateGrid(category, grid, data) {
 }
 
 function createCard(type, data, id, imgBackSrc) {
-  console.log(
-    `Creating card of type ${type}, id: ${id}, data: ${data}, imgBackSrc: ${imgBackSrc}`
-  );
   const cardContainer = document.createElement("div");
   cardContainer.classList.add("card-container");
 
@@ -106,8 +103,6 @@ function createCard(type, data, id, imgBackSrc) {
 }
 
 function initializeGame() {
-  console.log("initializeGame");
-
   const overlay = document.querySelector(".overlay-text");
   overlay.classList.add("visible");
 
@@ -146,7 +141,6 @@ function initializeGame() {
 const timer = document.getElementById("timer");
 let timerID;
 let seconds = 15;
-let timerStarted = false;
 
 function startTimer() {
   if (!timerStarted) {
