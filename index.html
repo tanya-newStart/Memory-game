@@ -13,7 +13,7 @@
     </header>
     <div class="overlay-text visible">
       <h5 class="title">Memory Game</h5>
-      <form>
+      <form id="user-settings">
         <label for="category"
           >Choose a category
           <select id="category" name="category-list">
@@ -21,13 +21,22 @@
             <option value="weather">Weather</option>
             <option value="clothes">Clothes</option>
           </select>
+          <br />
         </label>
-        <label for="timer">
+        <label for="user-timer">
           Set a time limit:
-          <input id="timer" type="number" default="10" />
+          <input
+            id="user-timer"
+            type="number"
+            name="user-timer"
+            min="10"
+            max="120"
+            value="15"
+          />
+          <p id="feedback"></p>
         </label>
       </form>
-      <button id="start-game" class="play">Start the Game</button>
+      <button id="start-game">Start the Game</button>
     </div>
     <div id="game-over" class="overlay-text">
       Game over!
@@ -35,7 +44,7 @@
     </div>
     <div id="success" class="overlay-text">
       Woo-hoo! All cards are matched!
-      <span>Play again</span>
+      <button id="play-again">Play again</button>
     </div>
     <div id="grid-container" class="disabled"></div>
 
