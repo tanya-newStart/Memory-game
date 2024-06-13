@@ -11,11 +11,11 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 25px;
+  padding: 1.5rem;
 }
 header {
   width: 100vh;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
   display: flex;
   justify-content: space-between;
   font-size: 1.2rem;
@@ -35,9 +35,9 @@ header {
   justify-items: center;
   align-items: center;
   z-index: 100;
-  gap: 10px;
-  padding: 30px;
-  border-radius: 10px;
+  gap: 0.75rem;
+  padding: 2rem;
+  border-radius: 0.5rem;
   color: white;
   font-size: 1.5em;
   text-align: center;
@@ -49,13 +49,13 @@ header {
 #start-game,
 #restart-game,
 #play-again {
-  margin-top: 20px;
-  padding: 10px 20px;
+  margin-top: 1.25rem;
+  padding: 1rem 1.25rem;
   font-size: 1.1rem;
   color: white;
   background-color: #ff69b4;
   border: none;
-  border-radius: 5px;
+  border-radius: 0.5rem;
   cursor: pointer;
 }
 #start-game:hover,
@@ -65,7 +65,7 @@ header {
 }
 #category,
 #user-timer {
-  padding: 5px;
+  padding: 0.5rem;
   font-size: 1.1rem;
   border-radius: 0.5rem;
 }
@@ -87,7 +87,7 @@ header {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  gap: 20px;
+  gap: 1.25rem;
 }
 .card-container {
   perspective: 1000px;
@@ -151,25 +151,23 @@ header {
 @media (max-width: 600px) {
   header {
     width: 100%;
-    margin-bottom: 10px;
     font-size: 0.9rem;
   }
   .overlay-text {
     width: 90%;
     max-width: 90%;
     height: auto;
-    padding: 20px;
+    padding: 1.25rem;
     font-size: 0.9rem;
   }
   body {
     background-color: #d3d3d3;
     height: auto;
-    padding: 20px;
   }
   #grid-container {
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    padding: 10px;
+    gap: 0.75rem;
+    padding: 0.5rem;
   }
   .card {
     width: 120px;
