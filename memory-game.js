@@ -6,15 +6,16 @@ let matchedCards = [];
 let numberOfMoves = 0;
 let timerStarted = false;
 let combinedArray = [];
-const timer = document.getElementById("timer");
 let timerID;
 let seconds;
 
+const timer = document.getElementById("timer");
+const overlay = document.querySelector(".overlay-text");
+const grid = document.getElementById("grid-container");
 document.addEventListener("DOMContentLoaded", () => {
-  const overlay = document.querySelector(".overlay-text");
-  const grid = document.getElementById("grid-container");
   const userTimer = document.getElementById("user-timer");
   seconds = parseInt(localStorage.getItem("seconds")) || 0;
+
   fetch(
     "https://raw.githubusercontent.com/tanya-newStart/tanya-newStart.github.io/main/data.json"
   )
@@ -27,44 +28,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const startGameBtn = document.getElementById("start-game");
   const restartGameBtn = document.getElementById("restart-game");
+  const playAgainBtn = document.getElementById("play-again");
 
   startGameBtn.addEventListener("click", () => {
     const userNumber = parseInt(userTimer.value);
-    if (isNaN(userNumber)) {
+    if (isNaN(userNumber) || userNumber < 0) {
       document.getElementById("feedback").textContent =
         "Please enter a valid number of seconds";
     } else {
       document.getElementById("feedback").textContent = "";
+      seconds = userNumber;
+      localStorage.setItem("seconds", seconds);
+      timer.innerHTML = seconds;
+      overlay.classList.remove("visible");
+      grid.classList.remove("disabled");
+      startTimer();
     }
-    seconds = userNumber;
-    localStorage.setItem("seconds", seconds);
-    timer.innerHTML = seconds;
-    overlay.classList.remove("visible");
-    grid.classList.remove("disabled");
-    startTimer();
   });
 
-  restartGameBtn.addEventListener("click", () => {
-    const overlays = document.querySelectorAll(".overlay-text");
-    overlays.forEach((overlay) => overlay.classList.remove("visible"));
+  restartGameBtn.addEventListener("click", resetGame);
 
-    resetTimer();
-    resetMoves();
-
-    const userTimer = document.getElementById("user-timer");
-    seconds =
-      parseInt(localStorage.getItem("seconds")) || parseInt(userTimer.value);
-    userTimer.value = seconds;
-    const selectedCategory = document.getElementById("category");
-    selectedCategory.value = localStorage.getItem("category");
-
-    grid.classList.add("disabled");
-    overlay.classList.add("visible");
-
-    grid.innerHTML = "";
-
-    populateGrid(selectedCategory.value, grid, data);
-  });
+  playAgainBtn.addEventListener("click", resetGame);
 
   document.getElementById("category").addEventListener("change", (e) => {
     const selectedCategory = e.target.value;
@@ -174,6 +158,8 @@ function createCard(type, data, id, imgBackSrc) {
       if (matchedCards.length === combinedArray.length) {
         const gameWon = document.getElementById("success");
         gameWon.classList.add("visible");
+
+        clearInterval(timerID);
       }
     }
   });
@@ -189,6 +175,29 @@ function initializeGame() {
   populateGrid("animals", grid, data);
 }
 //timer
+function resetGame() {
+  const overlays = document.querySelectorAll(".overlay-text");
+  overlays.forEach((overlay) => overlay.classList.remove("visible"));
+
+  resetTimer();
+  resetMoves();
+
+  const userTimer = document.getElementById("user-timer");
+  seconds =
+    parseInt(localStorage.getItem("seconds")) || parseInt(userTimer.value);
+  userTimer.value = seconds;
+  timer.innerHTML = seconds;
+
+  const selectedCategory = document.getElementById("category");
+  selectedCategory.value = localStorage.getItem("category");
+
+  grid.classList.add("disabled");
+  overlay.classList.add("visible");
+
+  grid.innerHTML = "";
+
+  populateGrid(selectedCategory.value, grid, data);
+}
 
 function startTimer() {
   if (!timerStarted) {
