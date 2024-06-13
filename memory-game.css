@@ -136,6 +136,9 @@ header {
   width: 100%;
   height: 100%;
 }
+.matched {
+  pointer-events: none;
+}
 @media (max-width: 600px) {
   header {
     width: 100%;
