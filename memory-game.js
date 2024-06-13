@@ -6,9 +6,15 @@ let matchedCards = [];
 let numberOfMoves = 0;
 let timerStarted = false;
 let combinedArray = [];
+const timer = document.getElementById("timer");
+let timerID;
+let seconds;
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("DOMContentLoaded");
+  const overlay = document.querySelector(".overlay-text");
+  const grid = document.getElementById("grid-container");
+  const userTimer = document.getElementById("user-timer");
+  seconds = parseInt(localStorage.getItem("seconds")) || 0;
   fetch(
     "https://raw.githubusercontent.com/tanya-newStart/tanya-newStart.github.io/main/data.json"
   )
@@ -18,6 +24,56 @@ document.addEventListener("DOMContentLoaded", () => {
       initializeGame();
     })
     .catch((error) => console.error(error));
+
+  const startGameBtn = document.getElementById("start-game");
+  const restartGameBtn = document.getElementById("restart-game");
+
+  startGameBtn.addEventListener("click", () => {
+    const userNumber = parseInt(userTimer.value);
+    if (isNaN(userNumber)) {
+      document.getElementById("feedback").textContent =
+        "Please enter a valid number of seconds";
+    } else {
+      document.getElementById("feedback").textContent = "";
+    }
+    seconds = userNumber;
+    localStorage.setItem("seconds", seconds);
+    timer.innerHTML = seconds;
+    overlay.classList.remove("visible");
+    grid.classList.remove("disabled");
+    startTimer();
+  });
+
+  restartGameBtn.addEventListener("click", () => {
+    const overlays = document.querySelectorAll(".overlay-text");
+    overlays.forEach((overlay) => overlay.classList.remove("visible"));
+
+    resetTimer();
+    resetMoves();
+
+    const userTimer = document.getElementById("user-timer");
+    seconds =
+      parseInt(localStorage.getItem("seconds")) || parseInt(userTimer.value);
+    userTimer.value = seconds;
+    const selectedCategory = document.getElementById("category");
+    selectedCategory.value = localStorage.getItem("category");
+
+    grid.classList.add("disabled");
+    overlay.classList.add("visible");
+
+    grid.innerHTML = "";
+
+    populateGrid(selectedCategory.value, grid, data);
+  });
+
+  document.getElementById("category").addEventListener("change", (e) => {
+    const selectedCategory = e.target.value;
+    localStorage.setItem("category", selectedCategory);
+    grid.classList.add("disabled");
+    resetTimer();
+    resetMoves();
+    populateGrid(selectedCategory, grid, data);
+  });
 });
 
 function combineData(images, words) {
@@ -103,7 +159,7 @@ function createCard(type, data, id, imgBackSrc) {
           card.classList.remove("isFlipped");
         });
         activeCards = [];
-      }, 2000);
+      }, 1500);
     }
     if (
       activeCards.length === 2 &&
@@ -127,38 +183,12 @@ function createCard(type, data, id, imgBackSrc) {
 function initializeGame() {
   const overlay = document.querySelector(".overlay-text");
   overlay.classList.add("visible");
-
   const grid = document.getElementById("grid-container");
   grid.classList.add("disabled");
-  const startGameBtn = document.getElementById("start-game");
-  const restartGameBtn = document.getElementById("restart-game");
 
-  startGameBtn.addEventListener("click", () => {
-    overlay.classList.remove("visible");
-    grid.classList.remove("disabled");
-  });
-  restartGameBtn.addEventListener("click", () => {
-    const overlays = document.querySelectorAll(".overlay-text");
-    overlays.forEach((overlay) => overlay.classList.remove("visible"));
-
-    resetTimer();
-    resetMoves();
-    populateGrid(document.getElementById("category").value, grid, data);
-  });
-
-  document.getElementById("category").addEventListener("change", (e) => {
-    const selectedCategory = e.target.value;
-    grid.classList.add("disabled");
-    resetTimer();
-    resetMoves();
-    populateGrid(selectedCategory, grid, data);
-  });
   populateGrid("animals", grid, data);
 }
 //timer
-const timer = document.getElementById("timer");
-let timerID;
-let seconds = 15;
 
 function startTimer() {
   if (!timerStarted) {
@@ -168,16 +198,18 @@ function startTimer() {
 }
 function countDown() {
   const gameOver = document.getElementById("game-over");
+  const grid = document.getElementById("grid-container");
   seconds--;
   timer.innerHTML = seconds;
   if (seconds === 0) {
     clearInterval(timerID);
     gameOver.classList.add("visible");
+    grid.classList.add("disabled");
   }
 }
 function resetTimer() {
   clearInterval(timerID);
-  seconds = 15;
+  seconds = parseInt(localStorage.getItem("seconds")) || 0;
   timer.innerHTML = seconds;
   timerStarted = false;
 }
