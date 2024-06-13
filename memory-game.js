@@ -5,6 +5,7 @@ let activeCards = [];
 let matchedCards = [];
 let numberOfMoves = 0;
 let timerStarted = false;
+let combinedArray = [];
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOMContentLoaded");
@@ -47,10 +48,7 @@ function populateGrid(category, grid, data) {
 
   const selectedCategory = categoryData[category];
 
-  const combinedArray = combineData(
-    selectedCategory.images,
-    selectedCategory.words
-  );
+  combinedArray = combineData(selectedCategory.images, selectedCategory.words);
 
   shuffle(combinedArray);
 
@@ -107,6 +105,21 @@ function createCard(type, data, id, imgBackSrc) {
         activeCards = [];
       }, 2000);
     }
+    if (
+      activeCards.length === 2 &&
+      activeCards[0].dataset.id === activeCards[1].dataset.id
+    ) {
+      activeCards[0].classList.add("matched");
+      activeCards[1].classList.add("matched");
+      matchedCards.push(activeCards[0]);
+      matchedCards.push(activeCards[1]);
+      activeCards = [];
+
+      if (matchedCards.length === combinedArray.length) {
+        const gameWon = document.getElementById("success");
+        gameWon.classList.add("visible");
+      }
+    }
   });
   return cardContainer;
 }
@@ -126,13 +139,11 @@ function initializeGame() {
   });
   restartGameBtn.addEventListener("click", () => {
     const overlays = document.querySelectorAll(".overlay-text");
-    overlays.forEach((item) => item.classList.remove("visible"));
-    grid.classList.add("disabled");
+    overlays.forEach((overlay) => overlay.classList.remove("visible"));
+
     resetTimer();
     resetMoves();
     populateGrid(document.getElementById("category").value, grid, data);
-
-    grid.classList.remove("disabled");
   });
 
   document.getElementById("category").addEventListener("change", (e) => {
@@ -141,8 +152,6 @@ function initializeGame() {
     resetTimer();
     resetMoves();
     populateGrid(selectedCategory, grid, data);
-
-    grid.classList.remove("disabled");
   });
   populateGrid("animals", grid, data);
 }
