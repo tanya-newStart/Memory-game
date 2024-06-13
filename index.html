@@ -13,14 +13,20 @@
     </header>
     <div class="overlay-text visible">
       <h5 class="title">Memory Game</h5>
-      <label for="category"
-        >Choose a category
-        <select id="category" name="category-list">
-          <option value="animals">Animals</option>
-          <option value="weather">Weather</option>
-          <option value="clothes">Clothes</option>
-        </select>
-      </label>
+      <form>
+        <label for="category"
+          >Choose a category
+          <select id="category" name="category-list">
+            <option value="animals">Animals</option>
+            <option value="weather">Weather</option>
+            <option value="clothes">Clothes</option>
+          </select>
+        </label>
+        <label for="timer">
+          Set a time limit:
+          <input id="timer" type="number" default="10" />
+        </label>
+      </form>
       <button id="start-game" class="play">Start the Game</button>
     </div>
     <div id="game-over" class="overlay-text">
@@ -31,7 +37,7 @@
       Woo-hoo! All cards are matched!
       <span>Play again</span>
     </div>
-    <div id="grid-container"></div>
+    <div id="grid-container" class="disabled"></div>
 
     <script src="memory-game.js"></script>
   </body>
