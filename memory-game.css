@@ -35,6 +35,7 @@ header {
   justify-items: center;
   align-items: center;
   z-index: 100;
+  gap: 10px;
   padding: 30px;
   border-radius: 10px;
   color: white;
@@ -46,7 +47,8 @@ header {
   animation: overlay-grow 500ms forwards;
 }
 #start-game,
-#restart-game {
+#restart-game,
+#play-again {
   margin-top: 20px;
   padding: 10px 20px;
   font-size: 1.1rem;
@@ -57,12 +59,19 @@ header {
   cursor: pointer;
 }
 #start-game:hover,
-#restart-game:hover {
+#restart-game:hover,
+#play-again:hover {
   background-color: #ff1493;
 }
-#category {
+#category,
+#user-timer {
   padding: 5px;
   font-size: 1.1rem;
+  border-radius: 0.5rem;
+}
+#feedback {
+  color: #333;
+  font-weight: 500;
 }
 @keyframes overlay-grow {
   from {
