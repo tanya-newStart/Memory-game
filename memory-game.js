@@ -12,52 +12,54 @@ let seconds;
 const timer = document.getElementById("timer");
 const overlay = document.querySelector(".overlay-text");
 const grid = document.getElementById("grid-container");
-document.addEventListener("DOMContentLoaded", () => {
-  const userTimer = document.getElementById("user-timer");
-  seconds = parseInt(localStorage.getItem("seconds")) || 0;
 
-  fetch(
-    "https://raw.githubusercontent.com/tanya-newStart/tanya-newStart.github.io/main/data.json"
-  )
-    .then((response) => response.json())
-    .then((rawData) => {
-      data = rawData;
-      initializeGame();
-    })
-    .catch((error) => console.error(error));
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const userTimer = document.getElementById("user-timer");
+    seconds = parseInt(localStorage.getItem("seconds")) || 0;
 
-  const startGameBtn = document.getElementById("start-game");
-  const restartGameBtn = document.getElementById("restart-game");
-  const playAgainBtn = document.getElementById("play-again");
+    const response = await fetch(
+      "https://raw.githubusercontent.com/tanya-newStart/tanya-newStart.github.io/main/data.json"
+    );
+    const rawData = await response.json();
+    data = rawData;
+    initializeGame();
 
-  startGameBtn.addEventListener("click", () => {
-    const userNumber = parseInt(userTimer.value);
-    if (isNaN(userNumber) || userNumber < 0) {
-      document.getElementById("feedback").textContent =
-        "Please enter a valid number of seconds";
-    } else {
-      document.getElementById("feedback").textContent = "";
-      seconds = userNumber;
-      localStorage.setItem("seconds", seconds);
-      timer.innerHTML = seconds;
-      overlay.classList.remove("visible");
-      grid.classList.remove("disabled");
-      startTimer();
-    }
-  });
+    const startGameBtn = document.getElementById("start-game");
+    const restartGameBtn = document.getElementById("restart-game");
+    const playAgainBtn = document.getElementById("play-again");
 
-  restartGameBtn.addEventListener("click", resetGame);
+    startGameBtn.addEventListener("click", () => {
+      const userNumber = parseInt(userTimer.value);
+      if (isNaN(userNumber) || userNumber < 0) {
+        document.getElementById("feedback").textContent =
+          "Please enter a valid number of seconds";
+      } else {
+        document.getElementById("feedback").textContent = "";
+        seconds = userNumber;
+        localStorage.setItem("seconds", seconds);
+        timer.innerHTML = seconds;
+        overlay.classList.remove("visible");
+        grid.classList.remove("disabled");
+        startTimer();
+      }
+    });
 
-  playAgainBtn.addEventListener("click", resetGame);
+    restartGameBtn.addEventListener("click", resetGame);
 
-  document.getElementById("category").addEventListener("change", (e) => {
-    const selectedCategory = e.target.value;
-    localStorage.setItem("category", selectedCategory);
-    grid.classList.add("disabled");
-    resetTimer();
-    resetMoves();
-    populateGrid(selectedCategory, grid, data);
-  });
+    playAgainBtn.addEventListener("click", resetGame);
+
+    document.getElementById("category").addEventListener("change", (e) => {
+      const selectedCategory = e.target.value;
+      localStorage.setItem("category", selectedCategory);
+      grid.classList.add("disabled");
+      resetTimer();
+      resetMoves();
+      populateGrid(selectedCategory, grid, data);
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 function combineData(images, words) {
