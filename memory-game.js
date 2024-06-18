@@ -186,7 +186,7 @@ function createCard(type, data, id, imgBackSrc) {
             jsConfetti.addConfetti();
           }, 500 * i);
         }
-
+        jsConfetti.clearCanvas();
         clearInterval(timerID);
       }
     }
@@ -216,6 +216,7 @@ function resetGame() {
   resetMoves();
   activeCards = [];
   matchedCards = [];
+
   const userTimer = document.getElementById("user-timer");
   seconds =
     parseInt(localStorage.getItem("seconds")) || parseInt(userTimer.value);
@@ -223,7 +224,7 @@ function resetGame() {
   timer.innerHTML = seconds;
 
   const selectedCategory = document.getElementById("category");
-  selectedCategory.value = localStorage.getItem("category");
+  selectedCategory.value = localStorage.getItem("category") || "animals";
 
   grid.classList.add("disabled");
   overlay.classList.add("visible");
