@@ -14,8 +14,14 @@
     <div class="overlay-text visible">
       <h5 class="title">Memory Game</h5>
       <form id="user-settings">
-        <label for="category"
-          >Choose a category
+        <label>
+          <input type="radio" name="language" value="english" checked />English
+        </label>
+        <label>
+          <input type="radio" name="language" value="danish" />Danish
+        </label>
+        <label for="category">
+          Choose a category
           <select id="category" name="category-list">
             <option value="animals">Animals</option>
             <option value="weather">Weather</option>
@@ -35,6 +41,10 @@
           />
         </label>
         <p id="feedback"></p>
+        <p id="instructions">
+          Match each image with its corresponding word before time runs out.
+          Good luck!
+        </p>
       </form>
       <button id="start-game">Start the Game</button>
     </div>
