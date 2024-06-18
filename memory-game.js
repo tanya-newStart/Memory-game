@@ -57,12 +57,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       resetMoves();
       populateGrid(selectedCategory, grid, data);
     });
+    document.querySelectorAll('input[name ="language"]').forEach((radio) => {
+      radio.addEventListener("change", (e) => {
+        const selectedLanguage = e.target.value;
+        localStorage.setItem("language", selectedLanguage);
+        const selectedCategory = document.getElementById("category").value;
+        localStorage.setItem("category", selectedCategory);
+        grid.classList.add("disabled");
+        resetTimer();
+        resetMoves();
+        populateGrid(selectedCategory, grid, data);
+      });
+    });
   } catch (error) {
     console.log(error);
   }
 });
 
-function combineData(images, words) {
+function combineData(images, words, language) {
   return [
     ...images.map((image) => ({
       ...image,
@@ -73,7 +85,7 @@ function combineData(images, words) {
     ...words.map((word) => ({
       ...word,
       type: "word",
-      data: word.word,
+      data: word[language],
       imgBackSrc: `${baseURL}/assets/back.jpg`,
     })),
   ];
@@ -83,14 +95,21 @@ function populateGrid(category, grid, data) {
   grid.innerHTML = "";
 
   const categoryData = {
-    animals: { images: data.images, words: data.animals },
+    animals: { images: data.imagesAnimals, words: data.animals },
     weather: { images: data.imagesWeather, words: data.weather },
     clothes: { images: data.imagesClothes, words: data.clothes },
   };
 
   const selectedCategory = categoryData[category];
+  const selectedLanguage =
+    localStorage.getItem("language") ||
+    document.querySelector('input[name ="language"]:checked').value;
 
-  combinedArray = combineData(selectedCategory.images, selectedCategory.words);
+  combinedArray = combineData(
+    selectedCategory.images,
+    selectedCategory.words,
+    selectedLanguage
+  );
 
   shuffle(combinedArray);
 
@@ -173,7 +192,12 @@ function initializeGame() {
   overlay.classList.add("visible");
   const grid = document.getElementById("grid-container");
   grid.classList.add("disabled");
-
+  const initialCategory = localStorage.getItem("category") || "animals";
+  const initialLanguage = localStorage.getItem("language") || "english";
+  document.getElementById("category").value = initialCategory;
+  document.querySelector(
+    `input[name="language"][value="${initialLanguage}"]`
+  ).checked = true;
   populateGrid("animals", grid, data);
 }
 //timer
