@@ -1,3 +1,5 @@
+const jsConfetti = new JSConfetti();
+
 const baseURL =
   "https://raw.githubusercontent.com/tanya-newStart/tanya-newStart.github.io/main";
 let data = {};
@@ -179,6 +181,11 @@ function createCard(type, data, id, imgBackSrc) {
       if (matchedCards.length === combinedArray.length) {
         const gameWon = document.getElementById("success");
         gameWon.classList.add("visible");
+        for (let i = 0; i < 3; i++) {
+          setTimeout(() => {
+            jsConfetti.addConfetti();
+          }, 500 * i);
+        }
 
         clearInterval(timerID);
       }
@@ -198,7 +205,7 @@ function initializeGame() {
   document.querySelector(
     `input[name="language"][value="${initialLanguage}"]`
   ).checked = true;
-  populateGrid("animals", grid, data);
+  populateGrid(initialCategory, grid, data);
 }
 //timer
 function resetGame() {
@@ -207,7 +214,8 @@ function resetGame() {
 
   resetTimer();
   resetMoves();
-
+  activeCards = [];
+  matchedCards = [];
   const userTimer = document.getElementById("user-timer");
   seconds =
     parseInt(localStorage.getItem("seconds")) || parseInt(userTimer.value);
