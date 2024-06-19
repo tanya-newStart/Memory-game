@@ -1,4 +1,8 @@
 const jsConfetti = new JSConfetti();
+const cardFlipSound = new Audio("./assets/card-flip.wav");
+const matchSound = new Audio("./assets/match-sound.wav");
+const winSound = new Audio("./assets/win-sound.wav");
+const loseSound = new Audio("./assets/lose-sound.wav");
 
 const baseURL =
   "https://raw.githubusercontent.com/tanya-newStart/tanya-newStart.github.io/main";
@@ -150,11 +154,12 @@ function createCard(type, data, id, imgBackSrc) {
   card.appendChild(imgBack);
   cardContainer.appendChild(card);
   card.addEventListener("click", function () {
+    cardFlipSound.play();
     if (activeCards.length >= 2 || card.classList.contains("isFlipped")) {
       return;
     }
     card.classList.toggle("isFlipped");
-    document.getElementById("counter").innerHTML = ++numberOfMoves;
+    document.getElementById("counter").innerHTML = ++numberOfMoves / 2;
     activeCards.push(card);
 
     if (activeCards.length === 1 && !timerStarted) {
@@ -172,6 +177,9 @@ function createCard(type, data, id, imgBackSrc) {
       activeCards.length === 2 &&
       activeCards[0].dataset.id === activeCards[1].dataset.id
     ) {
+      setTimeout(() => {
+        matchSound.play();
+      }, 800);
       activeCards[0].classList.add("matched");
       activeCards[1].classList.add("matched");
       matchedCards.push(activeCards[0]);
@@ -267,3 +275,4 @@ function shuffle(array) {
   array.sort(() => Math.random() - 0.5);
   return array;
 }
+0;
