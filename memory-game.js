@@ -1,3 +1,5 @@
+import "./timer.js";
+
 const jsConfetti = new JSConfetti();
 const cardFlipSound = new Audio("./assets/card-flip.wav");
 const matchSound = new Audio("./assets/match-sound.wav");
@@ -10,12 +12,9 @@ let data = {};
 let activeCards = [];
 let matchedCards = [];
 let numberOfMoves = 0;
-let timerStarted = false;
-let combinedArray = [];
-let timerID;
-let seconds;
 
-const timer = document.getElementById("timer");
+let combinedArray = [];
+
 const overlay = document.querySelector(".overlay-text");
 const grid = document.getElementById("grid-container");
 
@@ -23,6 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     const userTimer = document.getElementById("user-timer");
     seconds = parseInt(localStorage.getItem("seconds")) || 0;
+    totalSeconds = seconds;
 
     const response = await fetch(
       "https://raw.githubusercontent.com/tanya-newStart/tanya-newStart.github.io/main/data.json"
@@ -43,11 +43,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       } else {
         document.getElementById("feedback").textContent = "";
         seconds = userNumber;
+        totalSeconds = seconds;
         localStorage.setItem("seconds", seconds);
-        timer.innerHTML = seconds;
+        updateTimerDisplay();
         overlay.classList.remove("visible");
         grid.classList.remove("disabled");
-        startTimer();
       }
     });
 
@@ -159,7 +159,7 @@ function createCard(type, data, id, imgBackSrc) {
       return;
     }
     card.classList.toggle("isFlipped");
-    document.getElementById("counter").innerHTML = ++numberOfMoves / 2;
+    document.getElementById("counter").innerHTML = ++numberOfMoves;
     activeCards.push(card);
 
     if (activeCards.length === 1 && !timerStarted) {
@@ -215,7 +215,7 @@ function initializeGame() {
   ).checked = true;
   populateGrid(initialCategory, grid, data);
 }
-//timer
+
 function resetGame() {
   const overlays = document.querySelectorAll(".overlay-text");
   overlays.forEach((overlay) => overlay.classList.remove("visible"));
@@ -228,8 +228,9 @@ function resetGame() {
   const userTimer = document.getElementById("user-timer");
   seconds =
     parseInt(localStorage.getItem("seconds")) || parseInt(userTimer.value);
+  totalSeconds = seconds;
   userTimer.value = seconds;
-  timer.innerHTML = seconds;
+  updateTimerDisplay();
 
   const selectedCategory = document.getElementById("category");
   selectedCategory.value = localStorage.getItem("category") || "animals";
@@ -242,30 +243,6 @@ function resetGame() {
   populateGrid(selectedCategory.value, grid, data);
 }
 
-function startTimer() {
-  if (!timerStarted) {
-    timerID = setInterval(countDown, 1000);
-    timerStarted = true;
-  }
-}
-function countDown() {
-  const gameOver = document.getElementById("game-over");
-  const grid = document.getElementById("grid-container");
-  seconds--;
-  timer.innerHTML = seconds;
-  if (seconds === 0) {
-    clearInterval(timerID);
-    gameOver.classList.add("visible");
-    grid.classList.add("disabled");
-  }
-}
-function resetTimer() {
-  clearInterval(timerID);
-  seconds = parseInt(localStorage.getItem("seconds")) || 0;
-  timer.innerHTML = seconds;
-  timerStarted = false;
-}
-
 function resetMoves() {
   numberOfMoves = 0;
   document.getElementById("counter").innerHTML = numberOfMoves;
@@ -275,4 +252,3 @@ function shuffle(array) {
   array.sort(() => Math.random() - 0.5);
   return array;
 }
-0;

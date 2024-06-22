@@ -10,18 +10,25 @@
   </head>
   <body>
     <header>
-      <p>Count Down: <span id="timer">15</span>s</p>
+      <div id="timer-animate"></div>
       <p>Number of moves: <span id="counter">0</span></p>
     </header>
     <div class="overlay-text visible">
-      <h5 class="title">Memory Game</h5>
+      <h2 class="title">Memory Game</h2>
       <form id="user-settings">
-        <label>
-          <input type="radio" name="language" value="english" checked />English
-        </label>
-        <label>
-          <input type="radio" name="language" value="danish" />Danish
-        </label>
+        <div class="radio-group">
+          <label>
+            <input
+              type="radio"
+              name="language"
+              value="english"
+              checked
+            />English
+          </label>
+          <label>
+            <input type="radio" name="language" value="danish" />Danish
+          </label>
+        </div>
         <label for="category">
           Choose a category
           <select id="category" name="category-list">
@@ -59,7 +66,7 @@
       <button id="play-again">Play again</button>
     </div>
     <div id="grid-container" class="disabled"></div>
-
-    <script src="memory-game.js"></script>
+    <script src="timer.js"></script>
+    <script type="module" src="memory-game.js"></script>
   </body>
 </html>
