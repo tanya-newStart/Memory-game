@@ -3,7 +3,7 @@ import "./timer.js";
 const jsConfetti = new JSConfetti();
 const cardFlipSound = new Audio("./assets/card-flip.wav");
 const matchSound = new Audio("./assets/match-sound.wav");
-const winSound = new Audio("./assets/win-sound.wav");
+const winSound = new Audio("./assets/win-sound.mp3");
 const loseSound = new Audio("./assets/lose-sound.wav");
 
 const baseURL =
@@ -12,7 +12,6 @@ let data = {};
 let activeCards = [];
 let matchedCards = [];
 let numberOfMoves = 0;
-
 let combinedArray = [];
 
 const overlay = document.querySelector(".overlay-text");
@@ -37,6 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     startGameBtn.addEventListener("click", () => {
       const userNumber = parseInt(userTimer.value);
+
       if (isNaN(userNumber) || userNumber < 0) {
         document.getElementById("feedback").textContent =
           "Please enter a valid number of seconds";
@@ -59,10 +59,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       const selectedCategory = e.target.value;
       localStorage.setItem("category", selectedCategory);
       grid.classList.add("disabled");
+
       resetTimer();
       resetMoves();
+
       populateGrid(selectedCategory, grid, data);
     });
+
     document.querySelectorAll('input[name ="language"]').forEach((radio) => {
       radio.addEventListener("change", (e) => {
         const selectedLanguage = e.target.value;
@@ -70,8 +73,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         const selectedCategory = document.getElementById("category").value;
         localStorage.setItem("category", selectedCategory);
         grid.classList.add("disabled");
+
         resetTimer();
         resetMoves();
+
         populateGrid(selectedCategory, grid, data);
       });
     });
@@ -153,6 +158,7 @@ function createCard(type, data, id, imgBackSrc) {
   card.appendChild(frontContent);
   card.appendChild(imgBack);
   cardContainer.appendChild(card);
+
   card.addEventListener("click", function () {
     cardFlipSound.play();
     if (activeCards.length >= 2 || card.classList.contains("isFlipped")) {
@@ -189,12 +195,18 @@ function createCard(type, data, id, imgBackSrc) {
       if (matchedCards.length === combinedArray.length) {
         const gameWon = document.getElementById("success");
         gameWon.classList.add("visible");
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 5; i++) {
           setTimeout(() => {
             jsConfetti.addConfetti();
+            winSound.play().catch((error) => {
+              console.log("Audio play didn't work:", error);
+            });
           }, 500 * i);
         }
-        jsConfetti.clearCanvas();
+
+        setTimeout(() => {
+          jsConfetti.clearCanvas();
+        }, 3000);
         clearInterval(timerID);
       }
     }
@@ -209,10 +221,12 @@ function initializeGame() {
   grid.classList.add("disabled");
   const initialCategory = localStorage.getItem("category") || "animals";
   const initialLanguage = localStorage.getItem("language") || "english";
+
   document.getElementById("category").value = initialCategory;
   document.querySelector(
     `input[name="language"][value="${initialLanguage}"]`
   ).checked = true;
+
   populateGrid(initialCategory, grid, data);
 }
 

@@ -4,6 +4,8 @@ let secondsLeft;
 let totalSeconds;
 let timerStarted = false;
 
+const loseSound = new Audio("./assets/lose-sound.wav");
+
 function startTimer() {
   if (!timerStarted) {
     timerID = setInterval(() => {
@@ -22,6 +24,7 @@ function countDown() {
   if (secondsLeft === 0) {
     clearInterval(timerID);
     gameOver.classList.add("visible");
+    loseSound.play();
     grid.classList.add("disabled");
   }
 }
