@@ -10,7 +10,9 @@
   </head>
   <body>
     <header>
-      <div id="timer-animate"></div>
+      <div id="timer-container">
+        <div id="timer-animate"></div>
+      </div>
       <p>Number of moves: <span id="counter">0</span></p>
     </header>
     <div class="overlay-text visible">
@@ -44,9 +46,9 @@
             id="user-timer"
             type="number"
             name="user-timer"
-            min="10"
+            min="20"
             max="120"
-            value="15"
+            value="20"
           />
         </label>
         <p id="feedback"></p>

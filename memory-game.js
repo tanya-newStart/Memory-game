@@ -4,7 +4,6 @@ const jsConfetti = new JSConfetti();
 const cardFlipSound = new Audio("./assets/card-flip.wav");
 const matchSound = new Audio("./assets/match-sound.wav");
 const winSound = new Audio("./assets/win-sound.mp3");
-const loseSound = new Audio("./assets/lose-sound.wav");
 
 const baseURL =
   "https://raw.githubusercontent.com/tanya-newStart/tanya-newStart.github.io/main";

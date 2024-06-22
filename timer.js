@@ -39,8 +39,8 @@ function resetTimer() {
   setRemainingPathColor();
 }
 
-const warningTimeLeft = 10;
-const alertTimeLeft = 5;
+const warningTimeLeft = 15;
+const alertTimeLeft = 10;
 
 const colors = {
   info: {
