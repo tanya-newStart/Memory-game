@@ -1,127 +1,121 @@
-// an id, a name and a picture url
-const imagesWeather = [
-  {
-    name: "sunny",
-    url: "./assets/sunny.png",
-    "back-cover": "./assets/back.jpg",
-    id: 0,
-  },
-  {
-    name: "cloudy",
-    url: "./assets/cloudy.png",
-    "back-cover": "./assets/back.jpg",
-    id: 1,
-  },
-  {
-    name: "rainy",
-    url: "./assets/rainy.png",
-    "back-cover": "./assets/back.jpg",
-    id: 2,
-  },
-  {
-    name: "snowy",
-    url: "./assets/snowy.png",
-    "back-cover": "./assets/back.jpg",
-    id: 3,
-  },
-  {
-    name: "foggy",
-    url: "./assets/foggy.png",
-    "back-cover": "./assets/back.jpg",
-    id: 4,
-  },
+import "./timer.js";
 
-  {
-    name: "stormy",
-    url: "./assets/stormy.png",
-    "back-cover": "./assets/back.jpg",
-    id: 6,
-  },
-];
-const images = [
-  {
-    name: "fox",
-    url: "./assets/fox.jpg",
-    "back-cover": "./assets/back.jpg",
-    id: 0,
-  },
+const jsConfetti = new JSConfetti();
+const cardFlipSound = new Audio("./assets/card-flip.wav");
+const matchSound = new Audio("./assets/match-sound.wav");
+const winSound = new Audio("./assets/win-sound.wav");
+const loseSound = new Audio("./assets/lose-sound.wav");
 
-  {
-    name: "dog",
-    url: "./assets/dog.jpg",
-    "back-cover": "./assets/back.jpg",
-    id: 2,
-  },
-  {
-    name: "cat",
-    url: "./assets/cat.jpg",
-    "back-cover": "./assets/back.jpg",
-    id: 3,
-  },
-  {
-    name: "horse",
-    url: "./assets/horse.jpg",
-    "back-cover": "./assets/back.jpg",
-    id: 4,
-  },
-  {
-    name: "bear",
-    url: "./assets/bear.jpg",
-    "back-cover": "./assets/back.jpg",
-    id: 5,
-  },
-  {
-    name: "eagle",
-    url: "./assets/eagle.jpg",
-    "back-cover": "./assets/back.jpg",
-    id: 6,
-  },
-];
-const animals = [
-  { word: "ræv", id: 0 },
-  { word: "hund", id: 2 },
-  { word: "kat", id: 3 },
-  { word: "heste", id: 4 },
-  { word: "bjørn", id: 5 },
-  { word: "ørn", id: 6 },
-];
+const baseURL =
+  "https://raw.githubusercontent.com/tanya-newStart/tanya-newStart.github.io/main";
+let data = {};
+let activeCards = [];
+let matchedCards = [];
+let numberOfMoves = 0;
 
-const weather = [
-  { word: "sol", id: 0 },
-  { word: "overskyet", id: 1 },
-  { word: "regn", id: 2 },
-  { word: "sne", id: 3 },
-  { word: "tåge", id: 4 },
-  { word: "storm", id: 6 },
-];
-//get the grid container
-//create a card with a front and back image
-//add the card to the grid container
-function combineData(images, words) {
+let combinedArray = [];
+
+const overlay = document.querySelector(".overlay-text");
+const grid = document.getElementById("grid-container");
+
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const userTimer = document.getElementById("user-timer");
+    seconds = parseInt(localStorage.getItem("seconds")) || 0;
+    totalSeconds = seconds;
+
+    const response = await fetch(
+      "https://raw.githubusercontent.com/tanya-newStart/tanya-newStart.github.io/main/data.json"
+    );
+    const rawData = await response.json();
+    data = rawData;
+    initializeGame();
+
+    const startGameBtn = document.getElementById("start-game");
+    const restartGameBtn = document.getElementById("restart-game");
+    const playAgainBtn = document.getElementById("play-again");
+
+    startGameBtn.addEventListener("click", () => {
+      const userNumber = parseInt(userTimer.value);
+      if (isNaN(userNumber) || userNumber < 0) {
+        document.getElementById("feedback").textContent =
+          "Please enter a valid number of seconds";
+      } else {
+        document.getElementById("feedback").textContent = "";
+        seconds = userNumber;
+        totalSeconds = seconds;
+        localStorage.setItem("seconds", seconds);
+        updateTimerDisplay();
+        overlay.classList.remove("visible");
+        grid.classList.remove("disabled");
+      }
+    });
+
+    restartGameBtn.addEventListener("click", resetGame);
+
+    playAgainBtn.addEventListener("click", resetGame);
+
+    document.getElementById("category").addEventListener("change", (e) => {
+      const selectedCategory = e.target.value;
+      localStorage.setItem("category", selectedCategory);
+      grid.classList.add("disabled");
+      resetTimer();
+      resetMoves();
+      populateGrid(selectedCategory, grid, data);
+    });
+    document.querySelectorAll('input[name ="language"]').forEach((radio) => {
+      radio.addEventListener("change", (e) => {
+        const selectedLanguage = e.target.value;
+        localStorage.setItem("language", selectedLanguage);
+        const selectedCategory = document.getElementById("category").value;
+        localStorage.setItem("category", selectedCategory);
+        grid.classList.add("disabled");
+        resetTimer();
+        resetMoves();
+        populateGrid(selectedCategory, grid, data);
+      });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+function combineData(images, words, language) {
   return [
     ...images.map((image) => ({
       ...image,
       type: "image",
-      data: image.url,
-      imgBackSrc: image["back-cover"],
+      data: `${baseURL}/${image.url}`,
+      imgBackSrc: `${baseURL}/assets/back.jpg`,
     })),
     ...words.map((word) => ({
       ...word,
       type: "word",
-      data: word.word,
-      imgBackSrc: "./assets/back.jpg",
+      data: word[language],
+      imgBackSrc: `${baseURL}/assets/back.jpg`,
     })),
   ];
 }
-let activeCards = [];
-let matchedCards = [];
-let numberOfMoves = 0;
-function populateGrid(category, grid) {
+
+function populateGrid(category, grid, data) {
   grid.innerHTML = "";
-  let combinedArray =
-    category === "animals"
-      ? combineData(images, animals)
-      : combineData(imagesWeather, weather);
+
+  const categoryData = {
+    animals: { images: data.imagesAnimals, words: data.animals },
+    weather: { images: data.imagesWeather, words: data.weather },
+    clothes: { images: data.imagesClothes, words: data.clothes },
+  };
+
+  const selectedCategory = categoryData[category];
+  const selectedLanguage =
+    localStorage.getItem("language") ||
+    document.querySelector('input[name ="language"]:checked').value;
+
+  combinedArray = combineData(
+    selectedCategory.images,
+    selectedCategory.words,
+    selectedLanguage
+  );
 
   shuffle(combinedArray);
 
@@ -160,6 +154,7 @@ function createCard(type, data, id, imgBackSrc) {
   card.appendChild(imgBack);
   cardContainer.appendChild(card);
   card.addEventListener("click", function () {
+    cardFlipSound.play();
     if (activeCards.length >= 2 || card.classList.contains("isFlipped")) {
       return;
     }
@@ -176,74 +171,76 @@ function createCard(type, data, id, imgBackSrc) {
           card.classList.remove("isFlipped");
         });
         activeCards = [];
-      }, 2000);
+      }, 1500);
+    }
+    if (
+      activeCards.length === 2 &&
+      activeCards[0].dataset.id === activeCards[1].dataset.id
+    ) {
+      setTimeout(() => {
+        matchSound.play();
+      }, 800);
+      activeCards[0].classList.add("matched");
+      activeCards[1].classList.add("matched");
+      matchedCards.push(activeCards[0]);
+      matchedCards.push(activeCards[1]);
+      activeCards = [];
+
+      if (matchedCards.length === combinedArray.length) {
+        const gameWon = document.getElementById("success");
+        gameWon.classList.add("visible");
+        for (let i = 0; i < 3; i++) {
+          setTimeout(() => {
+            jsConfetti.addConfetti();
+          }, 500 * i);
+        }
+        jsConfetti.clearCanvas();
+        clearInterval(timerID);
+      }
     }
   });
   return cardContainer;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function initializeGame() {
   const overlay = document.querySelector(".overlay-text");
   overlay.classList.add("visible");
-
   const grid = document.getElementById("grid-container");
   grid.classList.add("disabled");
-  const startGameBtn = document.getElementById("start-game");
-  const restartGameBtn = document.getElementById("restart-game");
-
-  startGameBtn.addEventListener("click", () => {
-    overlay.classList.remove("visible");
-    grid.classList.remove("disabled");
-  });
-  restartGameBtn.addEventListener("click", (e) => {
-    const overlays = document.querySelectorAll(".overlay-text");
-    overlays.forEach((item) => item.classList.remove("visible"));
-    grid.classList.add("disabled");
-    resetTimer();
-    resetMoves();
-    populateGrid(document.getElementById("category").value, grid);
-
-    grid.classList.remove("disabled");
-  });
-
-  document.getElementById("category").addEventListener("change", (e) => {
-    const selectedCategory = e.target.value;
-    grid.classList.add("disabled");
-    resetTimer();
-    resetMoves();
-    populateGrid(selectedCategory, grid);
-
-    grid.classList.remove("disabled");
-  });
-  populateGrid("animals", grid);
-});
-
-//timer
-const timer = document.getElementById("timer");
-let timerID;
-let seconds = 15;
-let timerStarted = false;
-
-function startTimer() {
-  if (!timerStarted) {
-    timerID = setInterval(countDown, 1000);
-    timerStarted = true;
-  }
+  const initialCategory = localStorage.getItem("category") || "animals";
+  const initialLanguage = localStorage.getItem("language") || "english";
+  document.getElementById("category").value = initialCategory;
+  document.querySelector(
+    `input[name="language"][value="${initialLanguage}"]`
+  ).checked = true;
+  populateGrid(initialCategory, grid, data);
 }
-function countDown() {
-  const gameOver = document.getElementById("game-over");
-  seconds--;
-  timer.innerHTML = seconds;
-  if (seconds === 0) {
-    clearInterval(timerID);
-    gameOver.classList.add("visible");
-  }
-}
-function resetTimer() {
-  clearInterval(timerID);
-  seconds = 15;
-  timer.innerHTML = seconds;
-  timerStarted = false;
+
+function resetGame() {
+  const overlays = document.querySelectorAll(".overlay-text");
+  overlays.forEach((overlay) => overlay.classList.remove("visible"));
+
+  resetTimer();
+  resetMoves();
+  activeCards = [];
+  matchedCards = [];
+
+  const userTimer = document.getElementById("user-timer");
+  seconds =
+    parseInt(localStorage.getItem("seconds")) || parseInt(userTimer.value);
+  totalSeconds = seconds;
+  userTimer.value = seconds;
+  updateTimerDisplay();
+
+  const selectedCategory = document.getElementById("category");
+  selectedCategory.value = localStorage.getItem("category") || "animals";
+
+  grid.classList.add("disabled");
+  overlay.classList.add("visible");
+
+  grid.innerHTML = "";
+
+  populateGrid(selectedCategory.value, grid, data);
 }
 
 function resetMoves() {

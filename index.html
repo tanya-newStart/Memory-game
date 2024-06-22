@@ -3,24 +3,59 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+
     <link rel="stylesheet" href="memory-game.css" />
     <title>Memory Game</title>
   </head>
   <body>
     <header>
-      <p>Count Down: <span id="timer">15</span>s</p>
+      <div id="timer-animate"></div>
       <p>Number of moves: <span id="counter">0</span></p>
     </header>
     <div class="overlay-text visible">
-      <h5 class="title">Memory Game</h5>
-      <label for="category"
-        >Choose a category
-        <select id="category" name="category-list">
-          <option value="animals">Animals</option>
-          <option value="weather">Weather</option>
-        </select>
-      </label>
-      <button id="start-game" class="play">Start the Game</button>
+      <h2 class="title">Memory Game</h2>
+      <form id="user-settings">
+        <div class="radio-group">
+          <label>
+            <input
+              type="radio"
+              name="language"
+              value="english"
+              checked
+            />English
+          </label>
+          <label>
+            <input type="radio" name="language" value="danish" />Danish
+          </label>
+        </div>
+        <label for="category">
+          Choose a category
+          <select id="category" name="category-list">
+            <option value="animals">Animals</option>
+            <option value="weather">Weather</option>
+            <option value="clothes">Clothes</option>
+          </select>
+          <br />
+        </label>
+        <label for="user-timer">
+          Set a time limit:
+          <input
+            id="user-timer"
+            type="number"
+            name="user-timer"
+            min="10"
+            max="120"
+            value="15"
+          />
+        </label>
+        <p id="feedback"></p>
+        <p id="instructions">
+          Match each image with its corresponding word before time runs out.
+          Good luck!
+        </p>
+      </form>
+      <button id="start-game">Start the Game</button>
     </div>
     <div id="game-over" class="overlay-text">
       Game over!
@@ -28,10 +63,10 @@
     </div>
     <div id="success" class="overlay-text">
       Woo-hoo! All cards are matched!
-      <span>Play again</span>
+      <button id="play-again">Play again</button>
     </div>
-    <div id="grid-container"></div>
-
-    <script src="memory-game.js"></script>
+    <div id="grid-container" class="disabled"></div>
+    <script src="timer.js"></script>
+    <script type="module" src="memory-game.js"></script>
   </body>
 </html>
