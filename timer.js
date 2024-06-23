@@ -42,20 +42,6 @@ function resetTimer() {
 const warningTimeLeft = 15;
 const alertTimeLeft = 10;
 
-const colors = {
-  info: {
-    color: "green",
-  },
-  warning: {
-    color: "orange",
-    threshold: warningTimeLeft,
-  },
-  alert: {
-    color: "red",
-    threshold: alertTimeLeft,
-  },
-};
-
 function updateTimerDisplay() {
   const timerElement = document.getElementById("timer-animate");
   document.getElementById("timer-animate").innerHTML = `
@@ -106,12 +92,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function setRemainingPathColor(secondsLeft) {
-  const { alert, warning, info } = colors;
   const timerPathRemaining = document.getElementById("timer-path-remaining");
-  if (secondsLeft <= alert.threshold) {
+  if (secondsLeft <= alertTimeLeft) {
     timerPathRemaining.classList.remove("orange", "green");
     timerPathRemaining.classList.add("red");
-  } else if (secondsLeft <= warning.threshold) {
+  } else if (secondsLeft <= warningTimeLeft) {
     timerPathRemaining.classList.remove("green");
     timerPathRemaining.classList.add("orange");
   } else {
