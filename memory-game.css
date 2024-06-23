@@ -252,17 +252,10 @@ select {
     align-items: center;
     justify-content: center;
   }
-  .overlay-text {
-    position: fixed;
+  .overlay-text.visible {
+    position: absolute;
     padding: 0.5rem;
     font-size: 1rem;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    max-width: 90vw;
-    max-height: 90vh;
-    overflow-y: auto;
   }
   .overlay-text h2 {
     font-size: 1.5em;
