@@ -18,6 +18,7 @@ header {
   width: 100vh;
   margin-bottom: 1.5rem;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   font-size: 1.2rem;
@@ -26,11 +27,13 @@ header {
 h2 {
   text-transform: uppercase;
 }
-.timer {
+.timer,
+.moves {
   position: relative;
   height: 150px;
   width: 150px;
 }
+
 .timer_circle {
   fill: none;
   stroke: none;
@@ -61,7 +64,8 @@ h2 {
 .timer_svg {
   transform: scaleX(-1);
 }
-#timer-container {
+#timer-container,
+#moves-container {
   display: flex;
   justify-content: center;
   width: 100%;
@@ -71,7 +75,6 @@ h2 {
   max-width: 600px;
   width: 90%;
   max-height: 90vh;
-  overflow-y: auto;
   position: fixed;
   top: 50%;
   left: 50%;
