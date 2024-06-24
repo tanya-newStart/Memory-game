@@ -31,19 +31,18 @@ function countDown() {
 
 function resetTimer() {
   clearInterval(timerID);
-  seconds = parseInt(localStorage.getItem("seconds")) || 0;
+  secondsLeft = seconds = parseInt(localStorage.getItem("seconds")) || 0;
   totalSeconds = seconds;
   updateTimerDisplay();
   timerStarted = false;
   setCircleDasharray();
-  setRemainingPathColor();
+  setRemainingPathColor(secondsLeft);
 }
 
 const warningTimeLeft = 15;
 const alertTimeLeft = 10;
 
 function updateTimerDisplay() {
-  const timerElement = document.getElementById("timer-animate");
   document.getElementById("timer-animate").innerHTML = `
   <div class ="timer">
   <svg class ="timer_svg" viewBox ="0 0 100 100" xmlns="http://www.w3.org/2000/svg">

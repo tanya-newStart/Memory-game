@@ -19,8 +19,7 @@ const grid = document.getElementById("grid-container");
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const userTimer = document.getElementById("user-timer");
-    seconds = parseInt(localStorage.getItem("seconds")) || 0;
-    totalSeconds = seconds;
+    let seconds = parseInt(localStorage.getItem("seconds")) || 0;
 
     const response = await fetch(
       "https://raw.githubusercontent.com/tanya-newStart/tanya-newStart.github.io/main/data.json"
@@ -42,8 +41,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       } else {
         document.getElementById("feedback").textContent = "";
         seconds = userNumber;
-        totalSeconds = seconds;
         localStorage.setItem("seconds", seconds);
+        resetTimer();
         updateTimerDisplay();
         overlay.classList.remove("visible");
         grid.classList.remove("disabled");
@@ -239,9 +238,8 @@ function resetGame() {
   matchedCards = [];
 
   const userTimer = document.getElementById("user-timer");
-  seconds =
+  let seconds =
     parseInt(localStorage.getItem("seconds")) || parseInt(userTimer.value);
-  totalSeconds = seconds;
   userTimer.value = seconds;
   updateTimerDisplay();
 
