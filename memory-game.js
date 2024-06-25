@@ -163,13 +163,14 @@ function createCard(type, data, id, imgBackSrc) {
       return;
     }
     card.classList.toggle("isFlipped");
-    document.getElementById("counter").innerHTML = ++numberOfMoves;
+
     activeCards.push(card);
 
     if (activeCards.length === 1 && !timerStarted) {
       startTimer();
     }
     if (activeCards.length === 2) {
+      document.getElementById("counter").innerHTML = ++numberOfMoves;
       setTimeout(() => {
         activeCards.forEach((card) => {
           card.classList.remove("isFlipped");
