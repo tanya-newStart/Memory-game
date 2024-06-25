@@ -27,8 +27,7 @@ header {
 h2 {
   text-transform: uppercase;
 }
-.timer,
-.moves {
+.timer {
   position: relative;
   height: 150px;
   width: 150px;
@@ -235,6 +234,11 @@ select {
   .timer {
     position: fixed;
     top: 7%;
+    left: 5%;
+  }
+  .moves {
+    position: fixed;
+    top: 30%;
     left: 5%;
   }
   header {
