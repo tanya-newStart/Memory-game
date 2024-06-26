@@ -10,11 +10,13 @@
   </head>
   <body>
     <header>
-      <div id="timer-container">
-        <div id="timer-animate"></div>
-      </div>
-      <div id="moves-container">
-        <p class="moves">Number of moves: <span id="counter">0</span></p>
+      <div id="header-container">
+        <div id="timer-container">
+          <div id="timer-animate"></div>
+        </div>
+        <div id="moves-container">
+          <p class="moves">Number of moves: <span id="counter">0</span></p>
+        </div>
       </div>
     </header>
     <div class="overlay-text visible">
@@ -33,26 +35,21 @@
             <input type="radio" name="language" value="danish" />Danish
           </label>
         </div>
-        <label for="category">
-          Choose a category
-          <select id="category" name="category-list">
-            <option value="animals">Animals</option>
-            <option value="weather">Weather</option>
-            <option value="clothes">Clothes</option>
-          </select>
-          <br />
-        </label>
-        <label for="user-timer">
-          Set a time limit:
-          <input
-            id="user-timer"
-            type="number"
-            name="user-timer"
-            min="20"
-            max="120"
-            value="20"
-          />
-        </label>
+        <label for="category"> Choose a category</label>
+        <select id="category" name="category-list">
+          <option value="animals">Animals</option>
+          <option value="weather">Weather</option>
+          <option value="clothes">Clothes</option>
+        </select>
+        <label for="user-timer"> Set a time limit: </label>
+        <input
+          id="user-timer"
+          type="number"
+          name="user-timer"
+          min="20"
+          max="120"
+          value="20"
+        />
         <p id="feedback"></p>
         <p id="instructions">
           Match each image with its corresponding word before time runs out.
@@ -73,17 +70,33 @@
     <script src="timer.js"></script>
     <script type="module" src="memory-game.js"></script>
     <footer id="game-footer">
-      <form action="" id="user-form">
-        <label for="user-category"
-          >Suggest a category
-          <input
-            id="user-category"
-            type="text"
-            placeholder="Suggest a category"
-          />
-        </label>
-        <button type="submit" class="btn-submit">Submit</button>
-      </form>
+      <div class="contributions">
+        <p>
+          I would like to thank the following contributors for their amazing
+          sound effects:
+        </p>
+        <ul>
+          <li>
+            <a href="https://freesound.org/s/240776/">f4ngy</a>-
+            <em>Card flip</em>
+          </li>
+          <li>
+            <a href="https://freesound.org/s/615100/">MLaudio</a>-
+            <em>Success</em>
+          </li>
+          <li>
+            <a href="https://freesound.org/s/487436/">elijahdanie</a>-
+            <em>Game win</em>
+          </li>
+          <li>
+            <a href="https://freesound.org/s/652328/">ImATaco</a>-
+            <em>Game lose</em>
+          </li>
+        </ul>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Memory Game | Designed by Tanya Dewland</p>
+      </div>
     </footer>
   </body>
 </html>
