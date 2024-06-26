@@ -207,9 +207,6 @@ function createCard(type, data, id, imgBackSrc) {
           jsConfetti.clearCanvas();
         }, 3000);
         clearInterval(timerID);
-
-        const footer = document.getElementById("game-footer");
-        footer.classList.remove("disabled");
       }
     }
   });
@@ -222,9 +219,6 @@ function initializeGame() {
 
   const grid = document.getElementById("grid-container");
   grid.classList.add("disabled");
-
-  const footer = document.getElementById("game-footer");
-  footer.classList.add("disabled");
 
   const initialCategory = localStorage.getItem("category") || "animals";
   const initialLanguage = localStorage.getItem("language") || "english";
@@ -261,9 +255,6 @@ function resetGame() {
   grid.innerHTML = "";
 
   populateGrid(selectedCategory.value, grid, data);
-
-  const footer = document.getElementById("game-footer");
-  footer.classList.add("disabled");
 }
 
 function resetMoves() {
@@ -275,19 +266,3 @@ function shuffle(array) {
   array.sort(() => Math.random() - 0.5);
   return array;
 }
-
-//Get data from the user
-let userForm = document.getElementById("user-form");
-userForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  let userCategory = document.getElementById("user-category");
-  if (userCategory.value == "") {
-    console.log("No category was entered");
-  } else {
-    alert("Thank you for your suggestion!");
-    console.log(`${userCategory.value}`);
-
-    userCategory.value = "";
-  }
-});
