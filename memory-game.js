@@ -15,6 +15,7 @@ let combinedArray = [];
 
 const overlay = document.querySelector(".overlay-text");
 const grid = document.getElementById("grid-container");
+const header = document.querySelector("header");
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
@@ -45,6 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         resetTimer();
         updateTimerDisplay();
         overlay.classList.remove("visible");
+        header.classList.remove("disabled");
         grid.classList.remove("disabled");
       }
     });
@@ -216,8 +218,7 @@ function createCard(type, data, id, imgBackSrc) {
 function initializeGame() {
   const overlay = document.querySelector(".overlay-text");
   overlay.classList.add("visible");
-
-  const grid = document.getElementById("grid-container");
+  header.classList.add("disabled");
   grid.classList.add("disabled");
 
   const initialCategory = localStorage.getItem("category") || "animals";
@@ -234,6 +235,7 @@ function initializeGame() {
 function resetGame() {
   const overlays = document.querySelectorAll(".overlay-text");
   overlays.forEach((overlay) => overlay.classList.remove("visible"));
+  header.classList.remove("disabled");
 
   resetTimer();
   resetMoves();
