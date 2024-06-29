@@ -26,9 +26,6 @@ function countDown() {
     gameOver.classList.add("visible");
     loseSound.play();
     grid.classList.add("disabled");
-
-    const footer = document.getElementById("game-footer");
-    footer.classList.remove("disabled");
   }
 }
 

@@ -17,17 +17,18 @@ const overlay = document.querySelector(".overlay-text");
 const grid = document.getElementById("grid-container");
 const header = document.querySelector("header");
 
+//This block loads data from a JSON file hosted online and initializes the game once the DOM is fully loaded.
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const userTimer = document.getElementById("user-timer");
-    let seconds = parseInt(localStorage.getItem("seconds")) || 0;
-
     const response = await fetch(
       "https://raw.githubusercontent.com/tanya-newStart/tanya-newStart.github.io/main/data.json"
     );
     const rawData = await response.json();
     data = rawData;
     initializeGame();
+
+    const userTimer = document.getElementById("user-timer");
+    let seconds = parseInt(localStorage.getItem("seconds")) || 0;
 
     const startGameBtn = document.getElementById("start-game");
     const restartGameBtn = document.getElementById("restart-game");
@@ -130,6 +131,7 @@ function populateGrid(category, grid, data) {
   });
 }
 
+// creating cards and handling user interactions:
 function createCard(type, data, id, imgBackSrc) {
   const cardContainer = document.createElement("div");
   cardContainer.classList.add("card-container");
@@ -215,6 +217,7 @@ function createCard(type, data, id, imgBackSrc) {
   return cardContainer;
 }
 
+// function sets up the initial game state:
 function initializeGame() {
   const overlay = document.querySelector(".overlay-text");
   overlay.classList.add("visible");

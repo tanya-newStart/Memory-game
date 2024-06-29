@@ -18,7 +18,7 @@ body {
 }
 header.disabled {
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.3;
 }
 #header-container {
   margin-bottom: 1.5rem;
@@ -162,8 +162,8 @@ select {
 #feedback,
 #instructions {
   color: #333;
-  font-weight: 500;
-  font-size: 2rem;
+  font-weight: 600;
+  font-size: 2.25rem;
 }
 @keyframes overlay-grow {
   from {
