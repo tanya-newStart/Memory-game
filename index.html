@@ -19,57 +19,57 @@
         </div>
       </div>
     </header>
-    <div class="overlay-text visible">
-      <h1 class="title">Memory Game</h1>
-      <form id="user-settings">
-        <div class="radio-group">
-          <label>
-            <input
-              type="radio"
-              name="language"
-              value="english"
-              checked
-            />English
-          </label>
-          <label>
-            <input type="radio" name="language" value="danish" />Danish
-          </label>
-        </div>
-        <label for="category"> Choose a category</label>
-        <select id="category" name="category-list">
-          <option value="animals">Animals</option>
-          <option value="weather">Weather</option>
-          <option value="clothes">Clothes</option>
-        </select>
-        <label for="user-timer"> Set a time limit in seconds: </label>
-        <input
-          id="user-timer"
-          type="number"
-          name="user-timer"
-          min="20"
-          max="120"
-          value="20"
-        />
-        <p id="feedback"></p>
-        <p id="instructions">
-          Match each image with its corresponding word before time runs out.
-          <br />
-          Good luck!
-        </p>
-      </form>
-      <button id="start-game">Start the Game</button>
-    </div>
-    <div id="game-over" class="overlay-text">
-      Game over!
-      <button id="restart-game">Restart</button>
-    </div>
-    <div id="success" class="overlay-text">
-      Woo-hoo! All cards are matched!
-      <button id="play-again">Play again</button>
-    </div>
-    <div id="grid-container" class="disabled"></div>
-    <script src="timer.js"></script>
-    <script type="module" src="memory-game.js"></script>
+    <main>
+      <div class="overlay-text visible">
+        <h1 class="title">Memory Game</h1>
+        <form id="user-settings">
+          <div class="radio-group">
+            <label>
+              <input
+                type="radio"
+                name="language"
+                value="english"
+                checked
+              />English
+            </label>
+            <label>
+              <input type="radio" name="language" value="danish" />Danish
+            </label>
+          </div>
+          <label for="category"> Choose a category</label>
+          <select id="category" name="category-list">
+            <option value="animals">Animals</option>
+            <option value="weather">Weather</option>
+            <option value="clothes">Clothes</option>
+          </select>
+          <label for="user-timer"> Set a time limit in seconds: </label>
+          <input
+            id="user-timer"
+            type="number"
+            name="user-timer"
+            min="30"
+            max="120"
+            value="20"
+          />
+          <p id="feedback"></p>
+          <p id="instructions">
+            Match each image with its corresponding word before time runs out.
+            <br />
+            Good luck!
+          </p>
+        </form>
+        <button id="start-game">Start the Game</button>
+      </div>
+      <div id="game-over" class="overlay-text">
+        Game over!
+        <button id="restart-game">Restart</button>
+      </div>
+      <div id="success" class="overlay-text">
+        Woo-hoo! All cards are matched!
+        <button id="play-again">Play again</button>
+      </div>
+      <div id="grid-container" class="disabled"></div>
+    </main>
     <footer id="game-footer">
       <div class="contributions">
         <p>
@@ -99,5 +99,7 @@
         <p>&copy; 2024 Memory Game | Designed by Tanya Dewland</p>
       </div>
     </footer>
+    <script src="timer.js"></script>
+    <script type="module" src="memory-game.js"></script>
   </body>
 </html>
