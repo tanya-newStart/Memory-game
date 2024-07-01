@@ -1,6 +1,6 @@
-Memory Game
+#Memory Game
 
-Welcome to the Memory Game! This game is designed to test your memory skills by matching images with their corresponding words within a set time limit.
+#Welcome to the Memory Game! This game is designed to test your memory skills by #matching images with their corresponding words within a set time limit.
 
 Game Features
 Timer: Set a custom time limit to complete the game.
