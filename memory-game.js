@@ -36,8 +36,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     startGameBtn.addEventListener("click", () => {
       const userNumber = parseInt(userTimer.value);
-
-      if (isNaN(userNumber) || userNumber < 0) {
+      if (userNumber > 300 || userNumber < 20) {
+        document.getElementById("feedback").textContent =
+          "Please enter a number between 20 and 300";
+      } else if (isNaN(userNumber) || userNumber < 0) {
         document.getElementById("feedback").textContent =
           "Please enter a valid number of seconds";
       } else {
