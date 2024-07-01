@@ -3,8 +3,7 @@ import "./timer.js";
 const jsConfetti = new JSConfetti();
 const cardFlipSound = new Audio("./assets/card-flip.wav");
 const matchSound = new Audio("./assets/match-sound.wav");
-const winSound = new Audio("./assets/win-sound.wav");
-const loseSound = new Audio("./assets/lose-sound.wav");
+const winSound = new Audio("./assets/win-sound.mp3");
 
 const baseURL =
   "https://raw.githubusercontent.com/tanya-newStart/tanya-newStart.github.io/main";
@@ -12,18 +11,15 @@ let data = {};
 let activeCards = [];
 let matchedCards = [];
 let numberOfMoves = 0;
-
 let combinedArray = [];
 
 const overlay = document.querySelector(".overlay-text");
 const grid = document.getElementById("grid-container");
+const header = document.querySelector("header");
 
+//This block loads data from a JSON file hosted online and initializes the game once the DOM is fully loaded.
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const userTimer = document.getElementById("user-timer");
-    seconds = parseInt(localStorage.getItem("seconds")) || 0;
-    totalSeconds = seconds;
-
     const response = await fetch(
       "https://raw.githubusercontent.com/tanya-newStart/tanya-newStart.github.io/main/data.json"
     );
@@ -31,22 +27,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     data = rawData;
     initializeGame();
 
+    const userTimer = document.getElementById("user-timer");
+    let seconds = parseInt(localStorage.getItem("seconds")) || 0;
+
     const startGameBtn = document.getElementById("start-game");
     const restartGameBtn = document.getElementById("restart-game");
     const playAgainBtn = document.getElementById("play-again");
 
     startGameBtn.addEventListener("click", () => {
       const userNumber = parseInt(userTimer.value);
-      if (isNaN(userNumber) || userNumber < 0) {
+      if (userNumber > 300 || userNumber < 20) {
+        document.getElementById("feedback").textContent =
+          "Please enter a number between 20 and 300";
+      } else if (isNaN(userNumber) || userNumber < 0) {
         document.getElementById("feedback").textContent =
           "Please enter a valid number of seconds";
       } else {
         document.getElementById("feedback").textContent = "";
         seconds = userNumber;
-        totalSeconds = seconds;
         localStorage.setItem("seconds", seconds);
+        resetTimer();
         updateTimerDisplay();
         overlay.classList.remove("visible");
+        header.classList.remove("disabled");
         grid.classList.remove("disabled");
       }
     });
@@ -59,10 +62,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       const selectedCategory = e.target.value;
       localStorage.setItem("category", selectedCategory);
       grid.classList.add("disabled");
+
       resetTimer();
       resetMoves();
+
       populateGrid(selectedCategory, grid, data);
     });
+
     document.querySelectorAll('input[name ="language"]').forEach((radio) => {
       radio.addEventListener("change", (e) => {
         const selectedLanguage = e.target.value;
@@ -70,8 +76,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         const selectedCategory = document.getElementById("category").value;
         localStorage.setItem("category", selectedCategory);
         grid.classList.add("disabled");
+
         resetTimer();
         resetMoves();
+
         populateGrid(selectedCategory, grid, data);
       });
     });
@@ -125,6 +133,7 @@ function populateGrid(category, grid, data) {
   });
 }
 
+// creating cards and handling user interactions:
 function createCard(type, data, id, imgBackSrc) {
   const cardContainer = document.createElement("div");
   cardContainer.classList.add("card-container");
@@ -153,19 +162,21 @@ function createCard(type, data, id, imgBackSrc) {
   card.appendChild(frontContent);
   card.appendChild(imgBack);
   cardContainer.appendChild(card);
+
   card.addEventListener("click", function () {
     cardFlipSound.play();
     if (activeCards.length >= 2 || card.classList.contains("isFlipped")) {
       return;
     }
     card.classList.toggle("isFlipped");
-    document.getElementById("counter").innerHTML = ++numberOfMoves;
+
     activeCards.push(card);
 
     if (activeCards.length === 1 && !timerStarted) {
       startTimer();
     }
     if (activeCards.length === 2) {
+      document.getElementById("counter").innerHTML = ++numberOfMoves;
       setTimeout(() => {
         activeCards.forEach((card) => {
           card.classList.remove("isFlipped");
@@ -189,12 +200,18 @@ function createCard(type, data, id, imgBackSrc) {
       if (matchedCards.length === combinedArray.length) {
         const gameWon = document.getElementById("success");
         gameWon.classList.add("visible");
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 5; i++) {
           setTimeout(() => {
             jsConfetti.addConfetti();
+            winSound.play().catch((error) => {
+              console.log("Audio play didn't work:", error);
+            });
           }, 500 * i);
         }
-        jsConfetti.clearCanvas();
+
+        setTimeout(() => {
+          jsConfetti.clearCanvas();
+        }, 3000);
         clearInterval(timerID);
       }
     }
@@ -202,23 +219,28 @@ function createCard(type, data, id, imgBackSrc) {
   return cardContainer;
 }
 
+// function sets up the initial game state:
 function initializeGame() {
   const overlay = document.querySelector(".overlay-text");
   overlay.classList.add("visible");
-  const grid = document.getElementById("grid-container");
+  header.classList.add("disabled");
   grid.classList.add("disabled");
+
   const initialCategory = localStorage.getItem("category") || "animals";
   const initialLanguage = localStorage.getItem("language") || "english";
+
   document.getElementById("category").value = initialCategory;
   document.querySelector(
     `input[name="language"][value="${initialLanguage}"]`
   ).checked = true;
+
   populateGrid(initialCategory, grid, data);
 }
 
 function resetGame() {
   const overlays = document.querySelectorAll(".overlay-text");
   overlays.forEach((overlay) => overlay.classList.remove("visible"));
+  header.classList.remove("disabled");
 
   resetTimer();
   resetMoves();
@@ -226,9 +248,8 @@ function resetGame() {
   matchedCards = [];
 
   const userTimer = document.getElementById("user-timer");
-  seconds =
+  let seconds =
     parseInt(localStorage.getItem("seconds")) || parseInt(userTimer.value);
-  totalSeconds = seconds;
   userTimer.value = seconds;
   updateTimerDisplay();
 

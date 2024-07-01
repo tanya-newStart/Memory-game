@@ -4,6 +4,8 @@ let secondsLeft;
 let totalSeconds;
 let timerStarted = false;
 
+const loseSound = new Audio("./assets/lose-sound.wav");
+
 function startTimer() {
   if (!timerStarted) {
     timerID = setInterval(() => {
@@ -22,39 +24,25 @@ function countDown() {
   if (secondsLeft === 0) {
     clearInterval(timerID);
     gameOver.classList.add("visible");
+    loseSound.play();
     grid.classList.add("disabled");
   }
 }
 
 function resetTimer() {
   clearInterval(timerID);
-  seconds = parseInt(localStorage.getItem("seconds")) || 0;
+  secondsLeft = seconds = parseInt(localStorage.getItem("seconds")) || 0;
   totalSeconds = seconds;
   updateTimerDisplay();
   timerStarted = false;
   setCircleDasharray();
-  setRemainingPathColor();
+  setRemainingPathColor(secondsLeft);
 }
 
-const warningTimeLeft = 10;
-const alertTimeLeft = 5;
-
-const colors = {
-  info: {
-    color: "green",
-  },
-  warning: {
-    color: "orange",
-    threshold: warningTimeLeft,
-  },
-  alert: {
-    color: "red",
-    threshold: alertTimeLeft,
-  },
-};
+const warningTimeLeft = 15;
+const alertTimeLeft = 10;
 
 function updateTimerDisplay() {
-  const timerElement = document.getElementById("timer-animate");
   document.getElementById("timer-animate").innerHTML = `
   <div class ="timer">
   <svg class ="timer_svg" viewBox ="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -103,12 +91,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function setRemainingPathColor(secondsLeft) {
-  const { alert, warning, info } = colors;
   const timerPathRemaining = document.getElementById("timer-path-remaining");
-  if (secondsLeft <= alert.threshold) {
+  if (secondsLeft <= alertTimeLeft) {
     timerPathRemaining.classList.remove("orange", "green");
     timerPathRemaining.classList.add("red");
-  } else if (secondsLeft <= warning.threshold) {
+  } else if (secondsLeft <= warningTimeLeft) {
     timerPathRemaining.classList.remove("green");
     timerPathRemaining.classList.add("orange");
   } else {
