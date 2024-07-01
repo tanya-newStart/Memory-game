@@ -336,3 +336,8 @@ footer .footer-bottom {
   font-size: 1rem;
   color: #666;
 }
+.flag {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
