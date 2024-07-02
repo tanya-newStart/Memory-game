@@ -17,6 +17,10 @@ const overlay = document.querySelector(".overlay-text");
 const grid = document.getElementById("grid-container");
 const header = document.querySelector("header");
 
+window.addEventListener("load", () => {
+  const footer = document.querySelector("footer");
+  footer.style.display = "block";
+});
 //This block loads data from a JSON file hosted online and initializes the game once the DOM is fully loaded.
 document.addEventListener("DOMContentLoaded", async () => {
   try {
