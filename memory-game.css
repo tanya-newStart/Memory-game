@@ -122,16 +122,38 @@ h1 {
 .radio-group {
   display: flex;
   flex-direction: column;
+  margin: 1rem 0;
   gap: 1rem;
 }
 .radio-group label {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  cursor: pointer;
+  padding-left: 0.75rem;
+  margin-right: 1rem;
   gap: 0.5rem;
 }
-input[type="radio"] {
-  margin-right: 0.5rem;
+.radio-group label::before {
+  content: "";
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border: 2px solid #f8f3f3;
+  border-radius: 50%;
+  margin-right: 0.25rem;
 }
+input[type="radio"] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+input[type="radio"]:checked + label::before {
+  background-color: #d13e75;
+}
+label:hover::before {
+  border-color: #d13e75;
+}
+
 input[type="number"],
 select {
   width: 60%;
