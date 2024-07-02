@@ -24,25 +24,38 @@
         <h1 class="title">Memory Game</h1>
         <form id="user-settings">
           <div class="radio-group">
-            <label>
-              <input type="radio" name="language" value="english" checked />
+            <input
+              type="radio"
+              id="option1"
+              name="language"
+              value="english"
+              checked
+            />
+            <label for="option1">
               English
               <img
-                src="./assets/Flag_of_United_States.png"
+                src="assets/Flag_of_United_States.png"
                 alt="United States flag"
                 class="flag"
               />
             </label>
-            <label>
-              <input type="radio" name="language" value="danish" />Danish
+            <input type="radio" id="option2" name="language" value="danish" />
+            <label for="option2">
+              Danish
               <img
                 src="./assets/Flag_of_Denmark.png"
                 alt="Danish flag"
                 class="flag"
               />
             </label>
-            <label>
-              <input type="radio" name="language" value="ukrainian" />Ukrainian
+            <input
+              type="radio"
+              id="option3"
+              name="language"
+              value="ukrainian"
+            />
+            <label for="option3"
+              >Ukrainian
               <img
                 src="./assets/Flag_of_Ukraine.png"
                 alt="Ukrainian flag"
@@ -84,7 +97,7 @@
       </div>
       <div id="grid-container" class="disabled"></div>
     </main>
-    <footer id="game-footer">
+    <footer id="game-footer" style="display: none">
       <div class="contributions">
         <p>
           I would like to thank the following contributors for their amazing
