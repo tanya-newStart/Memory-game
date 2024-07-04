@@ -12,6 +12,7 @@ let activeCards = [];
 let matchedCards = [];
 let numberOfMoves = 0;
 let combinedArray = [];
+let confettiInterval;
 
 const overlay = document.querySelector(".overlay-text");
 const grid = document.getElementById("grid-container");
@@ -186,7 +187,7 @@ function createCard(type, data, id, imgBackSrc) {
           card.classList.remove("isFlipped");
         });
         activeCards = [];
-      }, 1500);
+      }, 1200);
     }
     if (
       activeCards.length === 2 &&
@@ -204,18 +205,28 @@ function createCard(type, data, id, imgBackSrc) {
       if (matchedCards.length === combinedArray.length) {
         const gameWon = document.getElementById("success");
         gameWon.classList.add("visible");
-        for (let i = 0; i < 5; i++) {
+        clearInterval(confettiInterval);
+        playWinSound();
+        for (let i = 0; i < 3; i++) {
           setTimeout(() => {
-            jsConfetti.addConfetti();
-            winSound.play().catch((error) => {
-              console.log("Audio play didn't work:", error);
+            jsConfetti.addConfetti({
+              confettiRadius: 10,
+              confettiNumber: 100,
+              confettiColors: [
+                "#ff0a54",
+                "#ff477e",
+                "#ff7096",
+                "#ff85a1",
+                "#fbb1bd",
+                "#f9bec7",
+              ],
             });
-          }, 500 * i);
+          }, 300 * i);
         }
 
         setTimeout(() => {
-          jsConfetti.clearCanvas();
-        }, 3000);
+          startContinuosConfetti();
+        }, 2000);
         clearInterval(timerID);
       }
     }
@@ -276,4 +287,50 @@ function resetMoves() {
 function shuffle(array) {
   array.sort(() => Math.random() - 0.5);
   return array;
+}
+
+function startContinuosConfetti() {
+  let confettiCount = 200;
+  confettiInterval = setInterval(() => {
+    if (confettiCount > 0) {
+      jsConfetti.addConfetti({
+        confettiRadius: 10,
+        confettiNumber: confettiCount,
+        confettiColors: [
+          "#ff0a54",
+          "#ff477e",
+          "#ff7096",
+          "#ff85a1",
+          "#fbb1bd",
+          "#f9bec7",
+        ],
+        duration: 1000,
+        fallingSpeed: 1,
+      });
+      confettiCount -= 50;
+    } else {
+      clearInterval(confettiInterval);
+    }
+  }, 500);
+}
+
+function playWinSound() {
+  let playCount = 0;
+
+  winSound.loop = false;
+
+  const playAndTrack = () => {
+    if (playCount < 3) {
+      winSound.play().catch((error) => {
+        console.log("Audio play didn't work:", error);
+      });
+      playCount++;
+    }
+  };
+  playAndTrack();
+  winSound.addEventListener("ended", playAndTrack);
+
+  setTimeout(() => {
+    winSound.removeEventListener("ended", playAndTrack);
+  }, winSound.duration * 5000);
 }
