@@ -1,4 +1,5 @@
 import "./timer.js";
+import { updateTexts, translations } from "./translations.js";
 
 const jsConfetti = new JSConfetti();
 const cardFlipSound = new Audio("./assets/card-flip.wav");
@@ -19,6 +20,7 @@ const grid = document.getElementById("grid-container");
 const header = document.querySelector("header");
 
 window.addEventListener("load", () => {
+  updateTexts("english");
   const footer = document.querySelector("footer");
   footer.style.display = "block";
 });
@@ -36,62 +38,91 @@ document.addEventListener("DOMContentLoaded", async () => {
     let seconds = parseInt(localStorage.getItem("seconds")) || 0;
 
     const startGameBtn = document.getElementById("start-game");
-    const restartGameBtn = document.getElementById("restart-game");
+    const btnRestart = document.getElementById("restart-game");
     const playAgainBtn = document.getElementById("play-again");
 
-    startGameBtn.addEventListener("click", () => {
-      const userNumber = parseInt(userTimer.value);
-      if (userNumber > 300 || userNumber < 20) {
-        document.getElementById("feedback").textContent =
-          "Please enter a number between 20 and 300";
-      } else if (isNaN(userNumber) || userNumber < 0) {
-        document.getElementById("feedback").textContent =
-          "Please enter a valid number of seconds";
-      } else {
-        document.getElementById("feedback").textContent = "";
-        seconds = userNumber;
-        localStorage.setItem("seconds", seconds);
-        resetTimer();
-        updateTimerDisplay();
-        overlay.classList.remove("visible");
-        header.classList.remove("disabled");
-        grid.classList.remove("disabled");
-      }
-    });
-
-    restartGameBtn.addEventListener("click", resetGame);
-
-    playAgainBtn.addEventListener("click", resetGame);
-
-    document.getElementById("category").addEventListener("change", (e) => {
-      const selectedCategory = e.target.value;
-      localStorage.setItem("category", selectedCategory);
-      grid.classList.add("disabled");
-
-      resetTimer();
-      resetMoves();
-
-      populateGrid(selectedCategory, grid, data);
-    });
-
+    if (startGameBtn) {
+      startGameBtn.addEventListener("click", () => {
+        const userNumber = parseInt(userTimer.value);
+        if (userNumber > 300 || userNumber < 20) {
+          document.getElementById("feedback").textContent =
+            "Please enter a number between 20 and 300";
+          document.getElementById("feedback").style.display = "block";
+        } else if (isNaN(userNumber) || userNumber < 0) {
+          document.getElementById("feedback").textContent =
+            "Please enter a valid number of seconds";
+          document.getElementById("feedback").style.display = "block";
+        } else {
+          document.getElementById("feedback").textContent = "";
+          seconds = userNumber;
+          localStorage.setItem("seconds", seconds);
+          resetTimer();
+          updateTimerDisplay();
+          overlay.classList.remove("visible");
+          header.classList.remove("disabled");
+          grid.classList.remove("disabled");
+        }
+      });
+    }
+    if (btnRestart) {
+      console.log("restart btn found");
+      btnRestart.addEventListener("click", resetGame);
+    } else {
+      console.log("Btn is not found");
+    }
+    if (playAgainBtn) {
+      console.log("play again btn found");
+      playAgainBtn.addEventListener("click", resetGame);
+    }
     document.querySelectorAll('input[name ="language"]').forEach((radio) => {
       radio.addEventListener("change", (e) => {
         const selectedLanguage = e.target.value;
         localStorage.setItem("language", selectedLanguage);
+        updateTexts(selectedLanguage);
+
         const selectedCategory = document.getElementById("category").value;
-        localStorage.setItem("category", selectedCategory);
+        const categoryKey = getCategoryKey(selectedCategory);
+        localStorage.setItem("category", categoryKey);
         grid.classList.add("disabled");
 
         resetTimer();
         resetMoves();
 
-        populateGrid(selectedCategory, grid, data);
+        populateGrid(categoryKey, grid, data);
       });
     });
+    document.getElementById("category").addEventListener("change", (e) => {
+      const selectedCategory = e.target.value;
+      const categoryKey = getCategoryKey(selectedCategory);
+      localStorage.setItem("category", categoryKey);
+      grid.classList.add("disabled");
+
+      resetTimer();
+      resetMoves();
+
+      populateGrid(categoryKey, grid, data);
+    });
+    const storedLanguage = localStorage.getItem("language") || "english";
+    updateTexts(storedLanguage);
   } catch (error) {
     console.log(error);
   }
 });
+
+function getCategoryKey(category) {
+  const categoryKey = {
+    animals: "animals",
+    weather: "weather",
+    clothes: "clothes",
+    dyr: "animals",
+    vejr: "weather",
+    tøj: "clothes",
+    тварини: "animals",
+    погода: "weather",
+    одяг: "clothes",
+  };
+  return categoryKey[category.toLowerCase()];
+}
 
 function combineData(images, words, language) {
   return [
@@ -110,7 +141,7 @@ function combineData(images, words, language) {
   ];
 }
 
-function populateGrid(category, grid, data) {
+function populateGrid(categoryKey, grid, data) {
   grid.innerHTML = "";
 
   const categoryData = {
@@ -119,7 +150,8 @@ function populateGrid(category, grid, data) {
     clothes: { images: data.imagesClothes, words: data.clothes },
   };
 
-  const selectedCategory = categoryData[category];
+  const selectedCategory = categoryData[categoryKey];
+
   const selectedLanguage =
     localStorage.getItem("language") ||
     document.querySelector('input[name ="language"]:checked').value;
@@ -205,28 +237,10 @@ function createCard(type, data, id, imgBackSrc) {
       if (matchedCards.length === combinedArray.length) {
         const gameWon = document.getElementById("success");
         gameWon.classList.add("visible");
+
         clearInterval(confettiInterval);
         playWinSound();
-        for (let i = 0; i < 3; i++) {
-          setTimeout(() => {
-            jsConfetti.addConfetti({
-              confettiRadius: 10,
-              confettiNumber: 100,
-              confettiColors: [
-                "#ff0a54",
-                "#ff477e",
-                "#ff7096",
-                "#ff85a1",
-                "#fbb1bd",
-                "#f9bec7",
-              ],
-            });
-          }, 300 * i);
-        }
-
-        setTimeout(() => {
-          startContinuosConfetti();
-        }, 2000);
+        startContinuousConfetti();
         clearInterval(timerID);
       }
     }
@@ -244,12 +258,19 @@ function initializeGame() {
   const initialCategory = localStorage.getItem("category") || "animals";
   const initialLanguage = localStorage.getItem("language") || "english";
 
-  document.getElementById("category").value = initialCategory;
-  document.querySelector(
-    `input[name="language"][value="${initialLanguage}"]`
-  ).checked = true;
+  updateTexts(initialLanguage);
 
-  populateGrid(initialCategory, grid, data);
+  const categoryKey = getCategoryKey(initialCategory);
+  const categoryElement = document.getElementById("category");
+  const translatedCategories = translations[initialLanguage].categories;
+  const translatedCategory = translatedCategories.find(
+    (cat) => getCategoryKey(cat.toLowerCase()) === categoryKey
+  );
+  categoryElement.value = translatedCategory
+    ? translatedCategory.toLowerCase()
+    : initialCategory;
+
+  populateGrid(categoryKey, grid, data);
 }
 
 function resetGame() {
@@ -257,6 +278,7 @@ function resetGame() {
   overlays.forEach((overlay) => overlay.classList.remove("visible"));
   header.classList.remove("disabled");
 
+  clearInterval(confettiInterval);
   resetTimer();
   resetMoves();
   activeCards = [];
@@ -269,14 +291,15 @@ function resetGame() {
   updateTimerDisplay();
 
   const selectedCategory = document.getElementById("category");
-  selectedCategory.value = localStorage.getItem("category") || "animals";
+  const storedCategory = localStorage.getItem("category") || "animals";
+  selectedCategory.value = storedCategory;
 
   grid.classList.add("disabled");
   overlay.classList.add("visible");
 
   grid.innerHTML = "";
-
-  populateGrid(selectedCategory.value, grid, data);
+  const categoryKey = getCategoryKey(storedCategory);
+  populateGrid(categoryKey, grid, data);
 }
 
 function resetMoves() {
@@ -289,47 +312,27 @@ function shuffle(array) {
   return array;
 }
 
-function startContinuosConfetti() {
-  let confettiCount = 200;
+function startContinuousConfetti() {
   confettiInterval = setInterval(() => {
-    if (confettiCount > 0) {
-      jsConfetti.addConfetti({
-        confettiRadius: 10,
-        confettiNumber: confettiCount,
-        confettiColors: [
-          "#ff0a54",
-          "#ff477e",
-          "#ff7096",
-          "#ff85a1",
-          "#fbb1bd",
-          "#f9bec7",
-        ],
-        duration: 1000,
-        fallingSpeed: 1,
-      });
-      confettiCount -= 50;
-    } else {
-      clearInterval(confettiInterval);
-    }
+    jsConfetti.addConfetti({
+      confettiRadius: 10,
+      confettiNumber: 100,
+      confettiColors: [
+        "#ff0a54",
+        "#ff477e",
+        "#ff7096",
+        "#ff85a1",
+        "#fbb1bd",
+        "#f9bec7",
+      ],
+      duration: 5000,
+      fallingSpeed: 0.2,
+    });
   }, 500);
 }
 
 function playWinSound() {
-  let playCount = 0;
-
-  winSound.loop = false;
-
-  const playAndTrack = () => {
-    if (playCount < 3) {
-      winSound.play().catch((error) => {
-        console.log("Audio play didn't work:", error);
-      });
-      playCount++;
-    } else {
-      winSound.removeEventListener("ended", playAndTrack);
-    }
-  };
-  winSound.addEventListener("ended", playAndTrack);
-
-  playAndTrack();
+  winSound.play().catch((error) => {
+    console.log("Audio play didn't work:", error);
+  });
 }
