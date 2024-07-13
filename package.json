@@ -1,0 +1,23 @@
+{
+  "name": "memory-game",
+  "version": "1.0.0",
+  "description": "match an image to a word in English,Danish, or Ukrainian",
+  "main": "memory-game.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tanya-newStart/Memory-game.git"
+  },
+  "author": "Tanya Dewland",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tanya-newStart/Memory-game/issues"
+  },
+  "homepage": "https://github.com/tanya-newStart/Memory-game#readme",
+  "dependencies": {
+    "canvas-confetti": "^1.9.3"
+  }
+}

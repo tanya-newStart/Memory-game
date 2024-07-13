@@ -1,7 +1,6 @@
 import "./timer.js";
 import { updateTexts, translations } from "./translations.js";
 
-const jsConfetti = new JSConfetti();
 const cardFlipSound = new Audio("./assets/card-flip.wav");
 const matchSound = new Audio("./assets/match-sound.wav");
 const winSound = new Audio("./assets/win-sound.wav");
@@ -13,7 +12,6 @@ let activeCards = [];
 let matchedCards = [];
 let numberOfMoves = 0;
 let combinedArray = [];
-let confettiInterval;
 
 const overlay = document.querySelector(".overlay-text");
 const grid = document.getElementById("grid-container");
@@ -238,9 +236,7 @@ function createCard(type, data, id, imgBackSrc) {
         const gameWon = document.getElementById("success");
         gameWon.classList.add("visible");
 
-        clearInterval(confettiInterval);
         playWinSound();
-        startContinuousConfetti();
         clearInterval(timerID);
       }
     }
@@ -278,7 +274,6 @@ function resetGame() {
   overlays.forEach((overlay) => overlay.classList.remove("visible"));
   header.classList.remove("disabled");
 
-  clearInterval(confettiInterval);
   resetTimer();
   resetMoves();
   activeCards = [];
@@ -310,25 +305,6 @@ function resetMoves() {
 function shuffle(array) {
   array.sort(() => Math.random() - 0.5);
   return array;
-}
-
-function startContinuousConfetti() {
-  confettiInterval = setInterval(() => {
-    jsConfetti.addConfetti({
-      confettiRadius: 10,
-      confettiNumber: 100,
-      confettiColors: [
-        "#ff0a54",
-        "#ff477e",
-        "#ff7096",
-        "#ff85a1",
-        "#fbb1bd",
-        "#f9bec7",
-      ],
-      duration: 5000,
-      fallingSpeed: 0.2,
-    });
-  }, 500);
 }
 
 function playWinSound() {
