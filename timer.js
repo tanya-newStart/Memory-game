@@ -6,7 +6,7 @@ let timerStarted = false;
 
 const loseSound = new Audio("./assets/lose-sound.wav");
 
-function startTimer() {
+export function startTimer() {
   if (!timerStarted) {
     timerID = setInterval(() => {
       countDown();
@@ -29,7 +29,7 @@ function countDown() {
   }
 }
 
-function resetTimer() {
+export function resetTimer() {
   clearInterval(timerID);
   secondsLeft = seconds = parseInt(localStorage.getItem("seconds")) || 0;
   totalSeconds = seconds;
@@ -42,7 +42,7 @@ function resetTimer() {
 const warningTimeLeft = 15;
 const alertTimeLeft = 10;
 
-function updateTimerDisplay() {
+export function updateTimerDisplay() {
   document.getElementById("timer-animate").innerHTML = `
   <div class ="timer">
   <svg class ="timer_svg" viewBox ="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
