@@ -121,7 +121,7 @@ function getCategoryKey(category) {
     погода: "weather",
     одяг: "clothes",
   };
-  return categoryKey[category.toLowerCase()];
+  return categoryKey[category.toLowerCase()] || category;
 }
 
 function combineData(images, words, language) {
@@ -292,6 +292,7 @@ function resetGame() {
 
   const selectedCategory = document.getElementById("category");
   const storedCategory = localStorage.getItem("category") || "animals";
+  console.log(storedCategory);
   selectedCategory.value = storedCategory;
 
   grid.classList.add("disabled");
