@@ -1,5 +1,6 @@
 import "./timer.js";
 import { updateTexts, translations } from "./translations.js";
+import confetti from "../node_modules/canvas-confetti/dist/confetti.module.mjs";
 
 const cardFlipSound = new Audio("./assets/card-flip.wav");
 const matchSound = new Audio("./assets/match-sound.wav");
@@ -235,7 +236,10 @@ function createCard(type, data, id, imgBackSrc) {
       if (matchedCards.length === combinedArray.length) {
         const gameWon = document.getElementById("success");
         gameWon.classList.add("visible");
-
+        confetti({
+          particleCount: 600,
+          spread: 360,
+        });
         playWinSound();
         clearInterval(timerID);
       }
