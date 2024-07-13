@@ -50,8 +50,8 @@ function updateTexts(language) {
   const btnStart = document.getElementById("start-game");
   const btnRestart = document.getElementById("restart-game");
   const btnPlayAgain = document.getElementById("play-again");
-  const gameOver = document.getElementById("game-over");
-  const success = document.getElementById("success");
+  const gameOver = document.querySelector(".game-over-text");
+  const success = document.querySelector(".success-text");
 
   moves.textContent = translations[language].moves;
 
