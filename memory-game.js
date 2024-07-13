@@ -1,4 +1,4 @@
-import "./timer.js";
+import { resetTimer, updateTimerDisplay, startTimer } from "./timer.js";
 import { updateTexts, translations } from "./translations.js";
 import confetti from "../node_modules/canvas-confetti/dist/confetti.module.mjs";
 
@@ -13,6 +13,7 @@ let activeCards = [];
 let matchedCards = [];
 let numberOfMoves = 0;
 let combinedArray = [];
+let timerStarted = false;
 
 const overlay = document.querySelector(".overlay-text");
 const grid = document.getElementById("grid-container");
