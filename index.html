@@ -15,7 +15,8 @@
           <div id="timer-animate"></div>
         </div>
         <div id="moves-container">
-          <p class="moves">Number of moves: <span id="counter">0</span></p>
+          <p class="moves">Number of moves:</p>
+          <p id="counter">0</p>
         </div>
       </div>
     </header>
@@ -41,7 +42,7 @@
             </label>
             <input type="radio" id="option2" name="language" value="danish" />
             <label for="option2">
-              Danish
+              Dansk
               <img
                 src="./assets/Flag_of_Denmark.png"
                 alt="Danish flag"
@@ -55,7 +56,7 @@
               value="ukrainian"
             />
             <label for="option3"
-              >Ukrainian
+              >Українська
               <img
                 src="./assets/Flag_of_Ukraine.png"
                 alt="Ukrainian flag"
@@ -78,7 +79,7 @@
             max="120"
             value="20"
           />
-          <p id="feedback"></p>
+          <p id="feedback" style="display: none"></p>
           <p id="instructions">
             Match each image with its corresponding word before time runs out.
             <br />
@@ -88,11 +89,11 @@
         <button id="start-game">Start the Game</button>
       </div>
       <div id="game-over" class="overlay-text">
-        Game over!
+        <span class="game-over-text">Game over!</span>
         <button id="restart-game">Restart</button>
       </div>
       <div id="success" class="overlay-text">
-        Woo-hoo! All cards are matched!
+        <span class="success-text">Woo-hoo! All cards are matched!</span>
         <button id="play-again">Play again</button>
       </div>
       <div id="grid-container" class="disabled"></div>
@@ -122,7 +123,8 @@
         <p>&copy; 2024 Memory Game | Designed by Tanya Dewland</p>
       </div>
     </footer>
-    <script src="timer.js"></script>
+    <script type="module" src="timer.js"></script>
+    <script type="module" src="translations.js"></script>
     <script type="module" src="memory-game.js"></script>
   </body>
 </html>

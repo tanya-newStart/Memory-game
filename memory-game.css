@@ -179,9 +179,9 @@ select {
 }
 
 #feedback {
-  color: #390daf;
+  color: #2a086b;
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 2rem;
 }
 #instructions {
   color: #333;
